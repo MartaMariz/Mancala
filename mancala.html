@@ -5,47 +5,71 @@
     <meta charset=UTF-8>        <!-- para caracteres acentuados   -->
     <title>Mancala</title>  <!-- texto na decoração da janela -->
   </head>
-<body >
-    <h1>Mancala</h1>
+<body>
+    <h1><center>Mancala</center></h1>
     <div class="menu">
         <ul>
-            <li><a href="#regras">Regras</a></li>
-            <li><a href="#config">Configuração do Jogo</a></li>
-            <li><a href="#classificacoes">Ver as classificações</a></li>
+            <li><button id="botao_instrucoes">Instruções</button></li>
+            <li><button id="botao_config">Configurações</button></li>
+            <li><button id="botao_classificacoes">Classificações</button></li>
         </ul>
         <hr>
-        <button type="button" >Novo jogo</button>
     </div>
-    <body data-player="one">
-        
-    
-        <div class="board">
-            <!--<img src="https://www.ikea.com/pt/en/images/products/varda-wood-stain-outdoor-use-colourless__0912015_pe617613_s5.jpg?f=s"  width = "500" hight ="100"> -->
-
-            <div class="player-two store"><p></p></div>
-    
+    <button type = button id="novojogo">Novo jogo</button>
+    <body>
+        <div id="board">
+            <div class="player-two area"><p></p></div>
             <div class="rows">
-                <div class="row player-two">
-                    <div class="pit"><p>4</p></div>
-                    <div class="pit"><p>4</p></div>
-                    <div class="pit"><p>4</p></div>
-                    <div class="pit"><p>4</p></div>
-                    <div class="pit"><p>4</p></div>
-                    <div class="pit"><p>4</p></div>
+                <div class="row">
+                    <div class="hole"><p>
+                        <div class= "bean"><p></p></div>
+                        <div class= "bean"><p></p></div>
+                        <div class= "bean"><p></p></div>
+                        <div class= "bean"><p></p></div>
+                    </p></div>
+                    <div class="hole"><p>4</p></div>
+                    <div class="hole"><p>4</p></div>
+                    <div class="hole"><p>4</p></div>
+                    <div class="hole"><p>4</p></div>
+                    <div class="hole"><p>4</p></div>
                 </div>
-                <div class="area"></div>
                 <br><br>
-                <div class="row player-one">
-                    <div class="pit"><p>4</p></div>
-                    <div class="pit"><p>4</p></div>
-                    <div class="pit"><p>4</p></div>
-                    <div class="pit"><p>4</p></div>
-                    <div class="pit"><p>4</p></div>
-                    <div class="pit"><p>4</p></div>
+                <div class="row">
+                    <div class="hole"><p>4</p></div>
+                    <div class="hole"><p>4</p></div>
+                    <div class="hole"><p>4</p></div>
+                    <div class="hole"><p>4</p></div>
+                    <div class="hole"><p>4</p></div>
+                    <div class="hole"><p>4</p></div>
                 </div>
-                <div class="area"></div>
-
             </div>
+            <div class="player-one area"><p></p></div>
         </div>
 
+        <div><a id="instrucoes">
+            <h2>Regras dos jogos Mancala</h2>
+                O Mancala é uma família de jogos origem africana, conhecidos como jogos de semeadura, também ou de contagem e captura. 
+                <br>São jogados em tabuleiros com concavidades contendo grãos ou contas.
+                <br><br>
+                <ul class="instrucoes_items">
+                    <li>O jogo passa-se num tabuleiro de 6 x 2 (com duas áreas próprias nos lados) e cada buraco contém 4 contas no início.</li>
+                    <li>O objectivo do jogo é conseguir mais pontos que o adversário, movendo contas para a própria área ou capturando as contas do adversário.</li>
+                    <li>O jogador, na sua vez, clica num buraco (da fila mais perto de si) que tenha pelo menos uma conta. Esta acção retirará todas as contas do buraco seleccionado e coloca-as, 
+                        <br>uma a uma, nos buracos seguintes, no sentido contrário ao dos ponteiros do relógio. A área do próprio jogador (do seu lado direito) é também usada nesta separação de contas e, 
+                        <br>quando uma conta lá é colocada, o jogador ganha um ponto. O jogador não pode colocar contas na área do jogador adversário.</li>
+                    <li>Se a última conta (da jogada actual) for colocada na própria área, o jogador continua a seleccionar outro buraco não vazio.</li>
+                    <li>Se a última conta (da jogada actual) for colocada num buraco vazio (no lado do jogador), todas as contas da mesma coluna, na linha adversária são capturadas e colocadas na área do jogador que fez a jogada.</li>
+                    <li>O jogo termina quando um dos jogadores não puder fazer a sua jogada - por não haver contas na sua fila. Quando isso ocorre, todas as contas que sobram são adicionadas à pontuação do adversário. O jogador com a maior pontuação ganha o jogo.</li>
+                </ul>
+        </div>
+
+        <div><a id="config">
+            <h2>Configurações</h2>
+            <div>Número de buracos:<input type="number"></div>
+            <div>Número de feijões:<input type="number"></div>
+        </div>
+
+        <div><a id="classificacoes">
+        </div>
+        <script src="myScript.js"></script>
 </body>
