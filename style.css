@@ -1,19 +1,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@200&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@200;300&display=swap');
 
+#heather{
+  display: flex;
+}
 h1{
+  flex: 1.5;
+  margin: 15px;
   font-family: 'Roboto Slab', serif;
   font-weight: 500;
   font-style: normal;
-  font-size: 38px;
+  font-size: 45px;
   line-height: 1.15;
   letter-spacing: -.02em;
   color: rgba(197, 60, 6, 0.924);
   -webkit-font-smoothing: antialiased;
+  transform: translate(47%, 0);
+
 }
+
 
 body{
   font-family: 'Roboto Slab', serif;
+  min-height: 100vh;
 }
 
 ul {
@@ -47,6 +56,15 @@ button{
   text-align: center;
   transition-duration: 0.4s;
 }
+button#botao_login, button#botao_signup{
+  opacity: 0.85;
+  width:100px;
+  line-height:1.1em;
+  transform: translate(-50%, 0);
+  background-color: #ec931f;
+  color:rgb(0, 0, 0);
+  border-radius: 7.5%;
+}
 
 button#novojogo{
   font-family: 'Roboto Slab', serif;
@@ -67,12 +85,14 @@ button#novojogo{
   text-align: center;
 }
 
+
+
 button:hover {
   background-color: #ec931f; /* Green */
   color: white;
 }
 
-button#novojogo:hover {
+button#novojogo:hover, button#botao_login:hover, button#botao_signup:hover {
   opacity: 1.0;
 }
 
@@ -142,5 +162,13 @@ button#novojogo:hover {
 }
 
 #classificacoes{
+  display: none;
+}
+
+#login{
+  display: none;
+}
+
+#signup{
   display: none;
 }

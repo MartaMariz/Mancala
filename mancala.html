@@ -6,7 +6,14 @@
     <title>Mancala</title>  <!-- texto na decoração da janela -->
   </head>
 <body>
-    <h1><center>Mancala</center></h1>
+    <div id="heather">
+    <h1>Mancala</h1>
+    <div id="loginbuttons">
+        <button type= button id="botao_login">Log in </button></li>
+        <br>
+        <button type= button id="botao_signup">Sign up</button></li>
+    </div>
+    </div>
     <div class="menu">
         <ul>
             <li><button id="botao_instrucoes">Instruções</button></li>
@@ -70,6 +77,22 @@
         </div>
 
         <div><a id="classificacoes">
+        </div>
+        <div><a id="login">
+            <h2>Log-in</h2>
+            <div>Email:  <input type="text"></div>
+            <div>Password: <input type="text"></div>
+
+        </a>
+        <div><a id="signup">
+            <h2>Sign-up</h2>
+            <div>Email:  <input type="text"></div>
+            <div>Password: <input type="text"></div>
+            <div>Confirm Password:<input type="text"></div>
+
+
+        </a>
+
         </div>
         <script src="myScript.js"></script>
 </body>
