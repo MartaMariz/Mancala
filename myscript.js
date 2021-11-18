@@ -1,3 +1,25 @@
+window.onload = function(){createBoard()};
+
+
+function createBoard(){
+
+    var board = document.getElementsById('board'); 
+
+    for (let j = 1; i<=2; i++){
+        let row = document.createElement('div');
+        row.setAttribute('class','row');
+
+        for(let i = 1; i <= 6; i++) { 
+            let hole = document.createElement('div');
+            hole.setAttribute('class','hole');
+            row.appendChild(hole);
+        }
+
+        board.appendChild(row);
+
+    }
+}
+
 
 function apagarConfig() {
     document.getElementById("config").style.display = "none";
