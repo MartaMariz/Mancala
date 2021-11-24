@@ -67,7 +67,6 @@ button#botao_login, button#botao_signup{
 }
 
 button#novojogo{
-  font-family: 'Roboto Slab', serif;
   opacity: 0.85;
   border: none;
   transition-duration: 0.1s;
@@ -84,8 +83,6 @@ button#novojogo{
   border-radius: 15%;
   text-align: center;
 }
-
-
 
 button:hover {
   background-color: #ec931f; /* Green */
@@ -109,7 +106,7 @@ button#novojogo:hover, button#botao_login:hover, button#botao_signup:hover {
   background: url("https://www.ikea.com/pt/en/images/products/varda-wood-stain-outdoor-use-colourless__0912015_pe617613_s5.jpg?f=s");
 }
 
-.rows {
+#rows {
 	flex: 7;
 	display: flex;
 	flex-direction: column;
@@ -121,7 +118,7 @@ button#novojogo:hover, button#botao_login:hover, button#botao_signup:hover {
 
 .hole, .area {
   flex: 1 1;
-  border-radius: 50%;
+  border-radius: 30%;
   margin: 10px;
 	display: flex;
 	justify-content: center;
@@ -133,20 +130,21 @@ button#novojogo:hover, button#botao_login:hover, button#botao_signup:hover {
 
 /*
 .hole {
+  position: absolute;
   max-width: 80px;
   max-height: 85px;
 }
 */
 
 .area {
-  border-radius: 25%;
+  border-radius: 30%;
 }
 
 .bean {
-  width: 18px;
-  height: 10px;
+  width: 10px;
+  height: 15px;
   margin: 5px;
-  border-radius: 80%;
+  border-radius: 50%;
   justify-content: center;
 	align-items: center;
   background-color:rgb(122, 45, 0);

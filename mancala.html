@@ -25,22 +25,10 @@
     <button type = button id="novojogo">Novo jogo</button>
     <body>
         <div id="board">
-           <!--  <div class="player-two area"><p></p></div>
-            <div class="rows">
-                <div class="row">
-
-                </div>
-                <br><br>
-                <div class="row">
-                    <div class="hole"><p>4</p></div>
-                    <div class="hole"><p>4</p></div>
-                    <div class="hole"><p>4</p></div>
-                    <div class="hole"><p>4</p></div>
-                    <div class="hole"><p>4</p></div>
-                    <div class="hole"><p>4</p></div>
-                </div>
+           <div class="player-two area"><p></p></div>
+            <div id="rows">
             </div>
-            <div class="player-one area"><p></p></div> -->
+            <div class="player-one area"><p></p></div>
         </div>
 
         <div><a id="instrucoes">
@@ -62,8 +50,9 @@
 
         <div><a id="config">
             <h2>Configurações</h2>
-            <div>Número de buracos:<input type="number"></div>
-            <div>Número de feijões:<input type="number"></div>
+            <div>Número de buracos:<input type="number" id="input_holes"><button type=button class="enviar" onclick="changeholes()">Enviar</button></div>
+            <div>Número de feijões:<input type="number" id="input_beans"><button type=button class="enviar" onclick="changebeans()">Enviar</button></div>
+
         </div>
 
         <div><a id="classificacoes">
@@ -74,6 +63,7 @@
             <div>Password: <input type="text"></div>
 
         </a>
+        </div>
         <div><a id="signup">
             <h2>Sign-up</h2>
             <div>Email:  <input type="text"></div>
@@ -82,7 +72,6 @@
 
 
         </a>
-
         </div>
         <script src="myScript.js"></script>
 </body>
