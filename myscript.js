@@ -1,11 +1,11 @@
-import {Board} from "./board.js";
+import {Board} from './board.js';
 
 window.onload = function(){
     var num_cavities = 6;
     var num_beans = 4;
-    this.board = createElement(new Board(this, num_cavities, num_beans));
-    var boardcontainer = document.getElementById("board");
-    boardcontainer.appendChild(this.board);
+    this.board = new Board(this, num_cavities, num_beans);
+    //var boardcontainer = document.getElementById("board");
+    //boardcontainer.appendChild(this.board);
 }
 
 function apagarConfig() {
