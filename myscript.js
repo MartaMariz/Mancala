@@ -1,33 +1,12 @@
+import {Board} from "./board.js";
+
 window.onload = function(){
-    var num_holes = 6;
-    var num_rows = 2;
+    var num_cavities = 6;
     var num_beans = 4;
-    createBoard(num_holes, num_rows, num_beans);
+    this.board = createElement(new Board(this, num_cavities, num_beans));
+    var boardcontainer = document.getElementById("board");
+    boardcontainer.appendChild(this.board);
 }
-
-function createBoard(num_holes, num_rows, num_beans){
-    var rows = document.getElementById("rows");
-    while (rows.firstChild) {
-        rows.removeChild(rows.firstChild);
-    }
-    for (let j = 1; j<=num_rows; j++){
-        let row = document.createElement("div");
-        row.setAttribute("class","row");
-        for(let i = 1; i<= num_holes; i++) {
-            let hole = document.createElement("div");
-            hole.setAttribute("class","hole");
-            for(let i = 1; i<= num_beans; i++) {
-                let bean = document.createElement("div");
-                bean.setAttribute("class","bean");
-                //placeBeanRandom(bean, hole);
-                hole.appendChild(bean);
-            }
-            row.appendChild(hole);
-        }
-        rows.appendChild(row);
-    }
-}
-
 
 function apagarConfig() {
     document.getElementById("config").style.display = "none";
@@ -103,7 +82,6 @@ function changebeans(){
 
 function placeBeanRandom(bean, hole) {
   
-    // If there isn't a parent defined, take body
     var parent = hole;
     
     // Limit the random number for the coordinates
