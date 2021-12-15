@@ -84,3 +84,4 @@ function changebeans(){
     var input_beans = document.getElementById("input_beans").value;
     new Board(6, input_beans, "board");
 }
+
