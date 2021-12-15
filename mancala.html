@@ -2,11 +2,15 @@
 <html lang>
   <head>
     <link rel="stylesheet" href = "style.css">
+    <script defer = true type="module" src="myscript.js"></script>
+    <script defer = true type="module" src="board.js"></script>
+    <script defer = true type="module" src="row.js"></script>
+    <script defer = true type="module" src="hole.js"></script>
     <meta charset=UTF-8>        <!-- para caracteres acentuados   -->
     <title>Mancala</title>  <!-- texto na decoração da janela -->
   </head>
 <body>
-    <div id="heather">
+    <div id="header">
     <h1>Mancala</h1>
     <div id="loginbuttons">
         <button type= button id="botao_login">Log in </button></li>
@@ -50,8 +54,8 @@
 
         <div><a id="config">
             <h2>Configurações</h2>
-            <div>Número de buracos:<input type="number" id="input_holes"><button type=button class="enviar" onclick="changeholes()">Enviar</button></div>
-            <div>Número de feijões:<input type="number" id="input_beans"><button type=button class="enviar" onclick="changebeans()">Enviar</button></div>
+            <div>Número de buracos:<input type="number" id="input_holes"><button type=button class="enviar" id="send_holes">Enviar</button></div>
+            <div>Número de feijões:<input type="number" id="input_beans"><button type=button class="enviar" id="send_beans">Enviar</button></div>
 
         </div>
 
@@ -73,6 +77,4 @@
 
         </a>
         </div>
-        <script type="module" src="myscript.js"></script>
-        <script type="module" src="board.js"></script>
 </body>

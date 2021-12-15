@@ -1,11 +1,10 @@
 import {Board} from './board.js';
 
+
 window.onload = function(){
-    var num_cavities = 6;
+    var num_holes = 6;
     var num_beans = 4;
-    this.board = new Board(this, num_cavities, num_beans);
-    //var boardcontainer = document.getElementById("board");
-    //boardcontainer.appendChild(this.board);
+    new Board(num_holes, num_beans, "board");
 }
 
 function apagarConfig() {
@@ -44,6 +43,7 @@ document.getElementById("botao_config").onclick = function() {
     apagarSignUp();
     apagarInstrucoes();
     document.getElementById("config").style.display = "block";
+    config_options();
 }
 
 document.getElementById("botao_login").onclick = function() {
@@ -70,27 +70,17 @@ document.getElementById("novojogo").onclick = function() {
     document.getElementById("board").style.display = "flex";
 }
 
+function config_options(){
+    document.getElementById("send_holes").addEventListener("click", changeholes());
+    document.getElementById("send_beans").addEventListener("click", changebeans());
+}
+
 function changeholes(){
     var input_holes = document.getElementById("input_holes").value;
-    createBoard(input_holes, 2, 4);
+    new Board(input_holes, 4, "board");
 }
 
 function changebeans(){
     var input_beans = document.getElementById("input_beans").value;
-    createBoard(6, 2, input_beans);
+    new Board(6, input_beans, "board");
 }
-
-function placeBeanRandom(bean, hole) {
-  
-    var parent = hole;
-    
-    // Limit the random number for the coordinates
-    var parentPosition = parent.getBoundingClientRect(),
-        beanPosition = bean.getBoundingClientRect(),
-        x = Math.floor(Math.random() * (parentPosition.width - beanPosition.width)) + parentPosition.left,
-        y = Math.floor(Math.random() * (parentPosition.height - beanPosition.height)) + parentPosition.top;
-    
-    console.log(parentPosition.top, parentPosition.right, parentPosition.bottom, parentPosition.left);
-
-    bean.style.transform = "translate3d(" + x + "px, " + y + "px, 0)";
-  };
