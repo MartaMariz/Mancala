@@ -150,7 +150,7 @@ button#novojogo:hover, button#botao_login:hover, button#botao_signup:hover {
   justify-content: center;
 	align-items: center;
   background-color:rgb(122, 45, 0);
-  box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0 2px 5px rgb(246 106 154);
 }
 
 
