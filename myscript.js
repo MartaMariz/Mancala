@@ -1,10 +1,33 @@
 import {Board} from './board.js';
 
+var game;
+
+class GameObjects{
+    constructor(num_holes, num_beans){
+        this.board = new Board(num_holes, num_beans, "board");
+    }
+    
+    changeholes(){
+        var input_holes = document.getElementById("input_holes").value;
+        let prev_board = this.board;
+        let num_beans = prev_board.num_beans;
+        this.board = new Board(input_holes, num_beans, "board");
+    }
+
+    changebeans(){
+        var input_beans = document.getElementById("input_beans").value;
+        let prev_board = this.board;
+        let num_holes = prev_board.num_holes;
+        new Board(num_holes, input_beans, "board");
+    }
+
+}
+
 
 window.onload = function(){
-    var num_holes = 6;
-    var num_beans = 4;
-    new Board(num_holes, num_beans, "board");
+    let num_holes = 6;
+    let num_beans = 4;
+    game = new GameObjects(num_holes, num_beans);
 }
 
 function apagarConfig() {
@@ -28,7 +51,6 @@ function apagarSignUp() {
 }
 
 
-
 document.getElementById("botao_instrucoes").onclick = function() {
     apagarBoard();
     apagarLogIn();
@@ -43,7 +65,6 @@ document.getElementById("botao_config").onclick = function() {
     apagarSignUp();
     apagarInstrucoes();
     document.getElementById("config").style.display = "block";
-    config_options();
 }
 
 document.getElementById("botao_login").onclick = function() {
@@ -70,18 +91,10 @@ document.getElementById("novojogo").onclick = function() {
     document.getElementById("board").style.display = "flex";
 }
 
-function config_options(){
-    document.getElementById("send_holes").addEventListener("click", changeholes());
-    document.getElementById("send_beans").addEventListener("click", changebeans());
+document.getElementById("send_holes").onclick = function() {
+    game.changeholes();
 }
 
-function changeholes(){
-    var input_holes = document.getElementById("input_holes").value;
-    new Board(input_holes, 4, "board");
+document.getElementById("send_beans").onclick = function() {
+    game.changebeans();
 }
-
-function changebeans(){
-    var input_beans = document.getElementById("input_beans").value;
-    new Board(6, input_beans, "board");
-}
-
