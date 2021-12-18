@@ -3,8 +3,8 @@ import {Hole} from './hole.js';
 
 export class Row {
     constructor(row_index, num_holes, num_beans){
-        this.html_id = "row"+row_index;
-        console.log(this.html_id);
+        this.html_id = "row"+row_index.toString();
+        console.log("idk " + this.html_id);
         this.row_index = row_index;
         this.num_holes = num_holes;
         this.num_beans = num_beans;

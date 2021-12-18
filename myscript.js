@@ -2,23 +2,23 @@ import {Board} from './board.js';
 
 var game;
 
-class GameObjects{
+class Game{
     constructor(num_holes, num_beans){
+        this.num_beans = num_beans;
+        this.num_holes = num_holes;
         this.board = new Board(num_holes, num_beans, "board");
+    }
+
+    newgame(){
+        this.board = new Board(this.num_holes, this.num_beans, "board");
     }
     
     changeholes(){
-        var input_holes = document.getElementById("input_holes").value;
-        let prev_board = this.board;
-        let num_beans = prev_board.num_beans;
-        this.board = new Board(input_holes, num_beans, "board");
+        this.num_holes = document.getElementById("input_holes").value;
     }
 
     changebeans(){
-        var input_beans = document.getElementById("input_beans").value;
-        let prev_board = this.board;
-        let num_holes = prev_board.num_holes;
-        new Board(num_holes, input_beans, "board");
+        this.num_beans = document.getElementById("input_beans").value;
     }
 
 }
@@ -27,7 +27,7 @@ class GameObjects{
 window.onload = function(){
     let num_holes = 6;
     let num_beans = 4;
-    game = new GameObjects(num_holes, num_beans);
+    game = new Game(num_holes, num_beans);
 }
 
 function apagarConfig() {
@@ -88,6 +88,7 @@ document.getElementById("novojogo").onclick = function() {
     apagarLogIn();
     apagarSignUp();
     apagarInstrucoes();
+    game.newgame();
     document.getElementById("board").style.display = "flex";
 }
 

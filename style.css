@@ -130,14 +130,6 @@ button#novojogo:hover, button#botao_login:hover, button#botao_signup:hover {
   position: relative;
 }
 
-/*
-.hole {
-  position: absolute;
-  max-width: 80px;
-  max-height: 85px;
-}
-*/
-
 .area {
   border-radius: 30%;
 }

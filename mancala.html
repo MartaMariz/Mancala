@@ -2,10 +2,11 @@
 <html lang>
   <head>
     <link rel="stylesheet" href = "style.css">
-    <script defer = true type="module" src="myscript.js"></script>
-    <script defer = true type="module" src="board.js"></script>
-    <script defer = true type="module" src="row.js"></script>
-    <script defer = true type="module" src="hole.js"></script>
+    <script type="module" src="myscript.js"></script>
+    <script type="module" src="board.js"></script>
+    <script type="module" src="row.js"></script>
+    <script type="module" src="hole.js"></script>
+    <script defer = true type="module" src="gamerules.js"></script>
     <meta charset=UTF-8>        <!-- para caracteres acentuados   -->
     <title>Mancala</title>  <!-- texto na decoração da janela -->
   </head>
@@ -31,6 +32,7 @@
         <div id="board">
            <div class="player-two area"><p></p></div>
             <div id="rows">
+                <div class ="hole"></div>
             </div>
             <div class="player-one area"><p></p></div>
         </div>
@@ -63,16 +65,16 @@
         </div>
         <div><a id="login">
             <h2>Log-in</h2>
-            <div>Email:  <input type="text"></div>
-            <div>Password: <input type="text"></div>
+            <div>Email: <input type="text"></div>
+            <div>Palavra Passe: <input type="text"></div>
 
         </a>
         </div>
         <div><a id="signup">
             <h2>Sign-up</h2>
-            <div>Email:  <input type="text"></div>
-            <div>Password: <input type="text"></div>
-            <div>Confirm Password:<input type="text"></div>
+            <div>Email: <input type="text"></div>
+            <div>Palavra Passe: <input type="text"></div>
+            <div>Confirme a Palavra Passe: <input type="text"></div>
 
 
         </a>

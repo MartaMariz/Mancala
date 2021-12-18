@@ -2,8 +2,7 @@ import {Bean} from './bean.js';
 
 export class Hole {
     constructor(row_index, hole_index, num_beans){
-        this.html_id = "hole"+row_index+hole_index;
-        console.log("beans"+num_beans);
+        this.html_id = "hole"+row_index.toString()+hole_index.toString();
         console.log("index do hole"+this.html_id);
         this.row_index = row_index;
         this.hole_index = hole_index;
@@ -13,8 +12,7 @@ export class Hole {
     }
 
     createHole(){
-        const row = document.getElementById("row"+this.row_index);
-        console.log("row"+this.row_index);
+        const row = document.getElementById("row"+(this.row_index).toString());
         let hole = document.createElement("div");
         hole.setAttribute("class", "hole");
         hole.setAttribute("id", this.html_id);
@@ -24,5 +22,9 @@ export class Hole {
             let bean = new Bean(this.row_index, this.hole_index);
             this.beanlist[k] = bean;
         }
+    }
+
+    spreadBeans(){
+
     }
 }
