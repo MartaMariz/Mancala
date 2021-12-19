@@ -16,12 +16,17 @@ export class Hole {
         let hole = document.createElement("div");
         hole.setAttribute("class", "hole");
         hole.setAttribute("id", this.html_id);
+        hole.addEventListener("click", this.handle);
         row.appendChild(hole);
             
         for(let k = 0; k<this.num_beans; k++) {
             let bean = new Bean(this.row_index, this.hole_index);
             this.beanlist[k] = bean;
         }
+    }
+    handle(){
+        console.log("click " );
+
     }
 
     spreadBeans(){

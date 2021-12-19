@@ -1,7 +1,5 @@
 export class Bean {
     constructor(row_index, hole_index){
-        console.log(row_index);
-        console.log(hole_index);
         this.row_index = row_index;
         this.hole_index = hole_index;
         this.createBean();

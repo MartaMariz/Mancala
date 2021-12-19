@@ -99,3 +99,7 @@ document.getElementById("send_holes").onclick = function() {
 document.getElementById("send_beans").onclick = function() {
     game.changebeans();
 }
+
+
+
+
