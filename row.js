@@ -44,7 +44,6 @@ export class Row {
         }
         
 
-
         return beansToDistribute;
     }
 }
