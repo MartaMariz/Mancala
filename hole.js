@@ -10,7 +10,7 @@ export class Hole {
         this.beanlist = [];
         this.createHole();
     }
-
+    
     createHole(){
         const row = document.getElementById("row"+(this.row_index).toString());
         let hole = document.createElement("div");
@@ -24,12 +24,22 @@ export class Hole {
             this.beanlist[k] = bean;
         }
     }
-    handle(){
-        console.log("click " );
-
+    addBean(){
+        let bean = new Bean(this.row_index, this.hole_index);
+        this.beanlist.push(bean);
+        console.log("adding bean to "+ this.html_id);
     }
 
     spreadBeans(){
+        let beansToDistribute = this.num_beans;
+        let hole = document.getElementById(this.html_id);
+        while (hole.firstChild) {
+            console.log("removing child");
+            hole.removeChild(hole.firstChild);
+        }
 
+        this.beanlist = [];
+        this.num_beans = 0;
+        return beansToDistribute;
     }
 }

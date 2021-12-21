@@ -20,6 +20,55 @@ export class Board {
             this.rowlist[j] = row;
         }
     }
+    play(index){
+        let currRow = 0;
+        console.log("oi "+ index);
+        if (index >= (this.num_holes)){
+            currRow =1;
+            index = index - this.num_holes;
+        }
+        let beansToDistribute = this.rowlist[currRow].getBeans(index);
+        while (beansToDistribute>0){
+            beansToDistribute = this.rowlist[currRow].distributeBeans(index, beansToDistribute);
+            if (currRow== 0) {
+                currRow =1;
+                index = -1;
+            }
+            else {currRow = 0;
+                index =this.num_holes;
+            }
+        }
+       
+        console.log(beansToDistribute);
+        
+        let currIndex= index;
+
+       /* while (numBeans>0 ){
+            if (currRow == 0 ){
+                if (currIndex<0){
+                    currRow = 1;
+                    currIndex = 0;
+                }
+                else{
+                    this.rowholelist[currIndex].addBean();
+                    currIndex--;
+                    numBeans--;
+                }
+            }
+            if (currRow == 1){
+                if (currIndex >= this.num_holes){
+                    currRow = 0;
+                    currIndex = this.num_holes -1;
+                }
+                else{
+                    this.holelist[currIndex].addBean();
+                    currIndex++;
+                    numBeans--;
+                }
+            }
+        }*/
+        
+    }
 
 }
 export default {Board}
