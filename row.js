@@ -38,6 +38,7 @@ export class Row {
         let currIndex = index + dir;
 
         while (currIndex != maxIndex && beansToDistribute != 0){
+            console.log("curr "+ currIndex);
             this.holelist[currIndex].addBean();
             currIndex = currIndex + dir;
             beansToDistribute --;

@@ -17,11 +17,11 @@ class Game{
     
     
     changeholes(){
-        this.num_holes = document.getElementById("input_holes").value;
+        this.num_holes = parseInt(document.getElementById("input_holes").value);
     }
 
     changebeans(){
-        this.num_beans = document.getElementById("input_beans").value;
+        this.num_beans = parseInt(document.getElementById("input_beans").value);
     }
 
 }
