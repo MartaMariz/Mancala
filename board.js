@@ -11,9 +11,9 @@ export class Board {
         this.createBoard();
     }
     createBoard(){
-        let scorecavity = document.getElementsByClassName("player-two scorecavity")[0];
+        let scorecavity = document.getElementById("player-two");
         while(scorecavity.firstChild) scorecavity.removeChild(scorecavity.firstChild);
-        scorecavity = document.getElementsByClassName("player-one scorecavity")[0];
+        scorecavity = document.getElementById("player-one");
         while(scorecavity.firstChild) scorecavity.removeChild(scorecavity.firstChild);
         
         const rows = document.getElementById("rows");
@@ -35,28 +35,42 @@ export class Board {
         let beansToDistribute = this.rowlist[currRow].getBeans(index);
         while (beansToDistribute>0){
             beansToDistribute = this.rowlist[currRow].distributeBeans(index, beansToDistribute);
-            if (currRow == 0) {
-                if (beansToDistribute>0){
+            if (beansToDistribute < 0) {
+                this.stealBeans(beansToDistribute*(-1));
+            }
+            if (beansToDistribute>0){
+                if (currRow == 0) {
                     new Bean(-1, 2);
                     console.log("adding bean to player-two");
                     beansToDistribute--;
+                    currRow = 1;
+                    index = -1;
                 }
-                currRow = 1;
-                index = -1;
-            }
-            else {
-                if (beansToDistribute>0){
+                else {
                     new Bean(-1, 1);
                     console.log("adding bean to player-one");
                     beansToDistribute--;
+                    currRow = 0;
+                    index = this.num_holes;
                 }
-                currRow = 0;
-                index = this.num_holes;
+            
             }
             console.log(beansToDistribute);
         }
-       
         
+    }
+
+    stealBeans(index){
+        let toSteal;
+        if (index >= (this.num_holes)){
+            toSteal = index - this.num_holes;
+            this.rowlist[1].stealBeans(toSteal);
+        }
+        else{
+            toSteal = index;
+            this.rowlist[0].stealBeans(toSteal);
+        }
+        console.log("stole from index " + toSteal);
     }
 
 }

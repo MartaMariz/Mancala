@@ -8,4 +8,5 @@ export class gameRules {
             holes[i].addEventListener("click", function(){board.play(i);});
         }
     }
+    
 }

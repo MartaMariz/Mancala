@@ -1,10 +1,10 @@
+import { Bean } from './bean.js';
 import {Hole} from './hole.js';
 
 
 export class Row {
     constructor(row_index, num_holes, num_beans){
         this.html_id = "row"+row_index.toString();
-        console.log("idk " + this.html_id);
         this.row_index = row_index;
         this.num_holes = num_holes;
         this.num_beans = num_beans;
@@ -37,13 +37,28 @@ export class Row {
         }
         let currIndex = index + dir;
 
-        while (currIndex != maxIndex && beansToDistribute != 0){
+        while (currIndex != maxIndex && beansToDistribute > 0){
             console.log("curr "+ currIndex);
             this.holelist[currIndex].addBean();
+            if (beansToDistribute == 1 &&  this.holelist[currIndex].num_beans == 1){
+                this.holelist[currIndex].spreadBeans();
+                let player;
+                if (this.row_index == 1) player = 1;
+                else player = 2;
+                new Bean(-1, player);
+                beansToDistribute = currIndex*(-1);
+                return beansToDistribute;
+            }
             currIndex = currIndex + dir;
             beansToDistribute --;
         }
         
         return beansToDistribute;
+    }
+    stealBeans(index){
+        let player = this.row_index + 1;
+        for (let i = 1; i <= this.holelist[index].beanlist.length; i++)
+            new Bean(-1, player);
+        this.holelist[index].spreadBeans();
     }
 }
