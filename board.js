@@ -1,5 +1,5 @@
 import {Row} from './row.js';
-
+import {Bean} from './bean.js';
 
 export class Board {
     constructor(num_holes, num_beans, html_id){
@@ -11,6 +11,11 @@ export class Board {
         this.createBoard();
     }
     createBoard(){
+        let scorecavity = document.getElementsByClassName("player-two scorecavity")[0];
+        while(scorecavity.firstChild) scorecavity.removeChild(scorecavity.firstChild);
+        scorecavity = document.getElementsByClassName("player-one scorecavity")[0];
+        while(scorecavity.firstChild) scorecavity.removeChild(scorecavity.firstChild);
+        
         const rows = document.getElementById("rows");
         while (rows.firstChild) {
             rows.removeChild(rows.firstChild);
@@ -24,49 +29,33 @@ export class Board {
         let currRow = 0;
         console.log("oi "+ index);
         if (index >= (this.num_holes)){
-            currRow =1;
+            currRow = 1;
             index = index - this.num_holes;
         }
         let beansToDistribute = this.rowlist[currRow].getBeans(index);
         while (beansToDistribute>0){
             beansToDistribute = this.rowlist[currRow].distributeBeans(index, beansToDistribute);
-            if (currRow== 0) {
-                currRow =1;
+            if (currRow == 0) {
+                if (beansToDistribute>0){
+                    new Bean(-1, 2);
+                    console.log("adding bean to player-two");
+                    beansToDistribute--;
+                }
+                currRow = 1;
                 index = -1;
             }
-            else {currRow = 0;
-                index =this.num_holes;
+            else {
+                if (beansToDistribute>0){
+                    new Bean(-1, 1);
+                    console.log("adding bean to player-one");
+                    beansToDistribute--;
+                }
+                currRow = 0;
+                index = this.num_holes;
             }
+            console.log(beansToDistribute);
         }
        
-        console.log(beansToDistribute);
-        
-        let currIndex= index;
-
-       /* while (numBeans>0 ){
-            if (currRow == 0 ){
-                if (currIndex<0){
-                    currRow = 1;
-                    currIndex = 0;
-                }
-                else{
-                    this.rowholelist[currIndex].addBean();
-                    currIndex--;
-                    numBeans--;
-                }
-            }
-            if (currRow == 1){
-                if (currIndex >= this.num_holes){
-                    currRow = 0;
-                    currIndex = this.num_holes -1;
-                }
-                else{
-                    this.holelist[currIndex].addBean();
-                    currIndex++;
-                    numBeans--;
-                }
-            }
-        }*/
         
     }
 

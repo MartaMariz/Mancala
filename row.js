@@ -43,8 +43,6 @@ export class Row {
             beansToDistribute --;
         }
         
-
-
         return beansToDistribute;
     }
 }

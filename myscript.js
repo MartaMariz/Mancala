@@ -1,7 +1,7 @@
 import {Board} from './board.js';
 import { gameRules } from './gamerules.js';
 
-var game;
+let game;
 
 class Game{
     constructor(num_holes, num_beans){
@@ -13,8 +13,6 @@ class Game{
     newgame(){
         this.board = new Board(this.num_holes, this.num_beans, "board");
         this.gameRules = new gameRules(this.board);
-        
-
     }
     
     
@@ -33,10 +31,6 @@ window.onload = function(){
     let num_holes = 6;
     let num_beans = 4;
     game = new Game(num_holes, num_beans);
-}
-function myFunction(index){
-    console.log("indice ");
-
 }
 
 function apagarConfig() {
@@ -111,6 +105,6 @@ document.getElementById("send_beans").onclick = function() {
 
 
 document.getElementsByClassName("hole").onclick = function() {
-    var holes = document.getElementsByClassName("hole");
+    let holes = document.getElementsByClassName("hole");
     console.log("length: "+ holes.length);
 }
