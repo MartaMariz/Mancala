@@ -27,7 +27,8 @@ export class Row {
     getBeans(index){
         return this.holelist[index].spreadBeans();
     }
-    distributeBeans(index, beansToDistribute){
+    distributeBeans(index, beansToDistribute, player){
+        let conditionToSteal = (player == this.row_index) || (player == 2 && this.row_index == 0);
         console.log("row" + this.row_index + " index " + index);
         let dir = this.row_index;
         let maxIndex = this.num_holes;
@@ -40,7 +41,8 @@ export class Row {
         while (currIndex != maxIndex && beansToDistribute > 0){
             console.log("curr "+ currIndex);
             this.holelist[currIndex].addBean();
-            if (beansToDistribute == 1 &&  this.holelist[currIndex].num_beans == 1){
+            
+            if (beansToDistribute == 1 &&  this.holelist[currIndex].num_beans == 1 && conditionToSteal){
                 sleep(2000).then(() => {
                     this.holelist[currIndex].spreadBeans();
                 });

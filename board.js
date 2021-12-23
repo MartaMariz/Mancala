@@ -10,6 +10,7 @@ export class Board {
         this.rowlist = [];
         this.createBoard();
     }
+    
     createBoard(){
         let scorecavity = document.getElementById("player-two");
         while(scorecavity.firstChild) scorecavity.removeChild(scorecavity.firstChild);
@@ -25,19 +26,23 @@ export class Board {
             this.rowlist[j] = row;
         }
     }
+
     play(index){
+        let player;
         let currRow = 0;
         console.log("oi "+ index);
         if (index >= (this.num_holes)){
             currRow = 1;
             index = index - this.num_holes;
+            player = 1;
         }
+        else player = 2;
         let beansToDistribute = this.rowlist[currRow].getBeans(index);
         while (beansToDistribute>0){
-            beansToDistribute = this.rowlist[currRow].distributeBeans(index, beansToDistribute);
+            beansToDistribute = this.rowlist[currRow].distributeBeans(index, beansToDistribute, player);
             if (beansToDistribute < 0) {
                 sleep(2000).then(() => {
-                    this.stealBeans(beansToDistribute*(-1));
+                    this.stealBeans(beansToDistribute*(-1), player);
                 });
             }
             if (beansToDistribute>0){
@@ -62,17 +67,26 @@ export class Board {
         
     }
 
-    stealBeans(index){
+    stealBeans(index, player){
         let toSteal;
-        if (index >= (this.num_holes)){
+        if (index >= (this.num_holes) && player == 2){
             toSteal = index - this.num_holes;
             this.rowlist[1].stealBeans(toSteal);
         }
-        else{
+        else if (index < (this.num_holes) && player == 1){
             toSteal = index;
             this.rowlist[0].stealBeans(toSteal);
         }
         console.log("stole from index " + toSteal);
+    }
+
+    simulateplay(index){
+        let points;
+        let previouspoints = document.getElementById("player-two").childElementCount;
+        console.log("index " + index + " prevpoints "+ previouspoints);
+        this.play(index);
+        points = document.getElementById("player-two").childElementCount - previouspoints;
+        return points;
     }
 
 }
