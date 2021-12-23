@@ -27,7 +27,6 @@ export class Hole {
     addBean(){
         let bean = new Bean(this.row_index, this.hole_index);
         this.beanlist.push(bean);
-        this.num_beans ++;
         console.log("adding bean to "+ this.html_id);
     }
 

@@ -1,7 +1,4 @@
 import {Row} from './row.js';
-import {scoreCavity} from './scorecavity.js';
-
-
 
 
 export class Board {
@@ -11,7 +8,6 @@ export class Board {
         this.num_beans = num_beans;
         this.num_rows = 2;
         this.rowlist = [];
-        this.cavitylist = [];
         this.createBoard();
     }
     createBoard(){
@@ -23,14 +19,6 @@ export class Board {
             let row = new Row(j, this.num_holes, this.num_beans);
             this.rowlist[j] = row;
         }
-        /*const scorecavities = document.getElementsByClassName("player area");
-        while (scorecavities.firstChild) {
-            scorecavities.removeChild(scorecavities.firstChild);
-        }
-
-        this.cavitylist[0] = new scoreCavity(0);
-        this.cavitylist[1] = new scoreCavity(1);
-*/
     }
     play(index){
         let currRow = 0;
@@ -42,22 +30,44 @@ export class Board {
         let beansToDistribute = this.rowlist[currRow].getBeans(index);
         while (beansToDistribute>0){
             beansToDistribute = this.rowlist[currRow].distributeBeans(index, beansToDistribute);
-            if (currRow== 0 && beansToDistribute>0) {
+            if (currRow== 0) {
                 currRow =1;
                 index = -1;
-                /*this.cavitylist[1].addBean();
-                beansToDistribute--;*/
             }
-            else if(beansToDistribute>0) {
-                currRow = 0;
+            else {currRow = 0;
                 index =this.num_holes;
-                /*this.cavitylist[0].addBean();
-                beansToDistribute--;*/
             }
         }
        
         console.log(beansToDistribute);
-                
+        
+        let currIndex= index;
+
+       /* while (numBeans>0 ){
+            if (currRow == 0 ){
+                if (currIndex<0){
+                    currRow = 1;
+                    currIndex = 0;
+                }
+                else{
+                    this.rowholelist[currIndex].addBean();
+                    currIndex--;
+                    numBeans--;
+                }
+            }
+            if (currRow == 1){
+                if (currIndex >= this.num_holes){
+                    currRow = 0;
+                    currIndex = this.num_holes -1;
+                }
+                else{
+                    this.holelist[currIndex].addBean();
+                    currIndex++;
+                    numBeans--;
+                }
+            }
+        }*/
+        
     }
 
 }
