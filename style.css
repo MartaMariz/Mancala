@@ -117,7 +117,7 @@ button#novojogo:hover, button#botao_login:hover, button#botao_signup:hover {
 	display: flex;
 }
 
-.hole, .scorecavity {
+.hole, .area {
   flex: 1 1;
   border-radius: 30%;
   margin: 10px;
@@ -130,7 +130,7 @@ button#novojogo:hover, button#botao_login:hover, button#botao_signup:hover {
   position: relative;
 }
 
-.scorecavity {
+.area {
   border-radius: 30%;
 }
 
@@ -143,13 +143,6 @@ button#novojogo:hover, button#botao_login:hover, button#botao_signup:hover {
 	align-items: center;
   background-color:rgb(122, 45, 0);
   box-shadow: inset 0 2px 5px rgb(246 106 154);
-  animation-name: example;
-  animation-duration: 2s;
-}
-
-@keyframes example {
-  from {width: 40px; height: 60px;}
-  to {width: 10px; height: 15px;}
 }
 
 
