@@ -1,10 +1,10 @@
+import { Bean } from './bean.js';
 import {Hole} from './hole.js';
 
 
 export class Row {
     constructor(row_index, num_holes, num_beans){
         this.html_id = "row"+row_index.toString();
-        console.log("idk " + this.html_id);
         this.row_index = row_index;
         this.num_holes = num_holes;
         this.num_beans = num_beans;
@@ -27,7 +27,8 @@ export class Row {
     getBeans(index){
         return this.holelist[index].spreadBeans();
     }
-    distributeBeans(index, beansToDistribute){
+    distributeBeans(index, beansToDistribute, player){
+        let conditionToSteal = (player == this.row_index) || (player == 2 && this.row_index == 0);
         console.log("row" + this.row_index + " index " + index);
         let dir = this.row_index;
         let maxIndex = this.num_holes;
@@ -37,14 +38,38 @@ export class Row {
         }
         let currIndex = index + dir;
 
-        while (currIndex != maxIndex && beansToDistribute != 0){
+        while (currIndex != maxIndex && beansToDistribute > 0){
+            console.log("curr "+ currIndex);
             this.holelist[currIndex].addBean();
+            
+            if (beansToDistribute == 1 &&  this.holelist[currIndex].num_beans == 1 && conditionToSteal){
+                sleep(2000).then(() => {
+                    this.holelist[currIndex].spreadBeans();
+                });
+                
+                let player = this.row_index;
+                sleep(2000).then(() => {
+                    new Bean(-1, player);
+                });
+                
+                beansToDistribute = currIndex*(-1);
+                return beansToDistribute;
+            }
             currIndex = currIndex + dir;
             beansToDistribute --;
+            
         }
         
-
-
         return beansToDistribute;
     }
+    stealBeans(index){
+        let player = this.row_index + 1;
+        for (let i = 1; i <= this.holelist[index].beanlist.length; i++)
+            new Bean(-1, player);
+        this.holelist[index].spreadBeans();
+    }
+}
+
+function sleep (time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
 }

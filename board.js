@@ -1,5 +1,5 @@
 import {Row} from './row.js';
-
+import {Bean} from './bean.js';
 
 export class Board {
     constructor(num_holes, num_beans, html_id){
@@ -10,7 +10,13 @@ export class Board {
         this.rowlist = [];
         this.createBoard();
     }
+    
     createBoard(){
+        let scorecavity = document.getElementById("player-two");
+        while(scorecavity.firstChild) scorecavity.removeChild(scorecavity.firstChild);
+        scorecavity = document.getElementById("player-one");
+        while(scorecavity.firstChild) scorecavity.removeChild(scorecavity.firstChild);
+        
         const rows = document.getElementById("rows");
         while (rows.firstChild) {
             rows.removeChild(rows.firstChild);
@@ -20,55 +26,73 @@ export class Board {
             this.rowlist[j] = row;
         }
     }
+
     play(index){
+        let player;
         let currRow = 0;
         console.log("oi "+ index);
         if (index >= (this.num_holes)){
-            currRow =1;
+            currRow = 1;
             index = index - this.num_holes;
+            player = 1;
         }
+        else player = 2;
         let beansToDistribute = this.rowlist[currRow].getBeans(index);
         while (beansToDistribute>0){
-            beansToDistribute = this.rowlist[currRow].distributeBeans(index, beansToDistribute);
-            if (currRow== 0) {
-                currRow =1;
-                index = -1;
+            beansToDistribute = this.rowlist[currRow].distributeBeans(index, beansToDistribute, player);
+            if (beansToDistribute < 0) {
+                sleep(2000).then(() => {
+                    this.stealBeans(beansToDistribute*(-1), player);
+                });
             }
-            else {currRow = 0;
-                index =this.num_holes;
-            }
-        }
-       
-        console.log(beansToDistribute);
-        
-        let currIndex= index;
-
-       /* while (numBeans>0 ){
-            if (currRow == 0 ){
-                if (currIndex<0){
+            if (beansToDistribute>0){
+                if (currRow == 0) {
+                    new Bean(-1, 2);
+                    console.log("adding bean to player-two");
+                    beansToDistribute--;
                     currRow = 1;
-                    currIndex = 0;
+                    index = -1;
                 }
-                else{
-                    this.rowholelist[currIndex].addBean();
-                    currIndex--;
-                    numBeans--;
-                }
-            }
-            if (currRow == 1){
-                if (currIndex >= this.num_holes){
+                else {
+                    new Bean(-1, 1);
+                    console.log("adding bean to player-one");
+                    beansToDistribute--;
                     currRow = 0;
-                    currIndex = this.num_holes -1;
+                    index = this.num_holes;
                 }
-                else{
-                    this.holelist[currIndex].addBean();
-                    currIndex++;
-                    numBeans--;
-                }
+            
             }
-        }*/
+            console.log(beansToDistribute);
+        }
         
     }
 
+    stealBeans(index, player){
+        let toSteal;
+        if (index >= (this.num_holes) && player == 2){
+            toSteal = index - this.num_holes;
+            this.rowlist[1].stealBeans(toSteal);
+        }
+        else if (index < (this.num_holes) && player == 1){
+            toSteal = index;
+            this.rowlist[0].stealBeans(toSteal);
+        }
+        console.log("stole from index " + toSteal);
+    }
+
+    simulateplay(index){
+        let points;
+        let previouspoints = document.getElementById("player-two").childElementCount;
+        console.log("index " + index + " prevpoints "+ previouspoints);
+        this.play(index);
+        points = document.getElementById("player-two").childElementCount - previouspoints;
+        return points;
+    }
+
 }
+
+function sleep (time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+}
+
 export default {Board}
