@@ -41,16 +41,21 @@ export class Row {
             console.log("curr "+ currIndex);
             this.holelist[currIndex].addBean();
             if (beansToDistribute == 1 &&  this.holelist[currIndex].num_beans == 1){
-                this.holelist[currIndex].spreadBeans();
-                let player;
-                if (this.row_index == 1) player = 1;
-                else player = 2;
-                new Bean(-1, player);
+                sleep(2000).then(() => {
+                    this.holelist[currIndex].spreadBeans();
+                });
+                
+                let player = this.row_index;
+                sleep(2000).then(() => {
+                    new Bean(-1, player);
+                });
+                
                 beansToDistribute = currIndex*(-1);
                 return beansToDistribute;
             }
             currIndex = currIndex + dir;
             beansToDistribute --;
+            
         }
         
         return beansToDistribute;
@@ -61,4 +66,8 @@ export class Row {
             new Bean(-1, player);
         this.holelist[index].spreadBeans();
     }
+}
+
+function sleep (time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
 }

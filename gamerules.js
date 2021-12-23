@@ -20,13 +20,12 @@ export class gameRules {
 
 function aiMove(ai_level, board){
     if (ai_level == 1){
-        console.log("someth " + board.num_holes);
-        let index = Math.floor(Math.random()*board.num_holes);
-        board.play(index);
+        //let index = Math.floor(Math.random()*board.num_holes);
+        board.play(5);
     }
 }
 
 function sleep (time) {
     return new Promise((resolve) => setTimeout(resolve, time));
-  }
+}
   

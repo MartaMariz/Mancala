@@ -36,7 +36,9 @@ export class Board {
         while (beansToDistribute>0){
             beansToDistribute = this.rowlist[currRow].distributeBeans(index, beansToDistribute);
             if (beansToDistribute < 0) {
-                this.stealBeans(beansToDistribute*(-1));
+                sleep(2000).then(() => {
+                    this.stealBeans(beansToDistribute*(-1));
+                });
             }
             if (beansToDistribute>0){
                 if (currRow == 0) {
@@ -74,4 +76,9 @@ export class Board {
     }
 
 }
+
+function sleep (time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+}
+
 export default {Board}
