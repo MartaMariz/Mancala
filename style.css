@@ -23,6 +23,7 @@ h1{
 body{
   font-family: 'Roboto Slab', serif;
   min-height: 100vh;
+  padding: 2em;
 }
 
 ul {
@@ -66,30 +67,12 @@ button#botao_login, button#botao_signup{
   border-radius: 7.5%;
 }
 
-button#novojogo{
-  opacity: 0.85;
-  border: none;
-  transition-duration: 0.1s;
-  list-style-type: none;
-  margin: 0;
-  position: relative;
-  left: 50%;
-  margin-right: -50%;
-  transform: translate(-50%, 0);
-  padding: 7px 13px;
-  overflow: hidden;
-  background-color: #ec931f;
-  color:rgb(0, 0, 0);
-  border-radius: 15%;
-  text-align: center;
-}
-
 button:hover {
-  background-color: #ec931f; /* Green */
+  background-color: #ec931f;
   color: white;
 }
 
-button#novojogo:hover, button#botao_login:hover, button#botao_signup:hover {
+button#novojogo:hover, button#botao_login:hover, button#botao_signup:hover, button#continuarjogo:hover {
   opacity: 1.0;
 }
 

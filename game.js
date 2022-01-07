@@ -38,6 +38,7 @@ class Game{
 
 
 window.onload = function(){
+    document.getElementById("continuarjogo").style.display = "none";
     let num_holes = 6;
     let num_beans = 4;
     let ai_level = 1;
@@ -70,6 +71,7 @@ document.getElementById("botao_instrucoes").onclick = function() {
     apagarLogIn();
     apagarSignUp();
     apagarConfig();
+    document.getElementById("continuarjogo").style.display = "block";
     document.getElementById("instrucoes").style.display = "block";
 }
 
@@ -78,6 +80,7 @@ document.getElementById("botao_config").onclick = function() {
     apagarLogIn();
     apagarSignUp();
     apagarInstrucoes();
+    document.getElementById("continuarjogo").style.display = "block";
     document.getElementById("config").style.display = "block";
 }
 
@@ -86,6 +89,7 @@ document.getElementById("botao_login").onclick = function() {
     apagarInstrucoes();
     apagarSignUp();
     apagarConfig();
+    document.getElementById("continuarjogo").style.display = "block";
     document.getElementById("login").style.display = "block";
 }
 
@@ -94,6 +98,7 @@ document.getElementById("botao_signup").onclick = function() {
     apagarInstrucoes();
     apagarLogIn();
     apagarConfig();
+    document.getElementById("continuarjogo").style.display = "block";
     document.getElementById("signup").style.display = "block";
 }
 
@@ -103,6 +108,14 @@ document.getElementById("novojogo").onclick = function() {
     apagarSignUp();
     apagarInstrucoes();
     game.newgame();
+    document.getElementById("board").style.display = "flex";
+}
+
+document.getElementById("continuarjogo").onclick = function() {
+    apagarConfig();
+    apagarLogIn();
+    apagarSignUp();
+    apagarInstrucoes();
     document.getElementById("board").style.display = "flex";
 }
 
