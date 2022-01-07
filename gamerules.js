@@ -27,10 +27,7 @@ export class gameRules {
                         }while (Playagain == -1 || Playagain == 2);
                         gameState = board.endGame();
 
-                        if (gameState == 1) {
-                            await sleep(25000).then(() => { console.log("IM ENDING ");});
-                        }
-
+                       
                     });
                      enableClick(board);
                 }
