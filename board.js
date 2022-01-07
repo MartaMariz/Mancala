@@ -28,19 +28,26 @@ export class Board {
     }
 
     endGame(){
-        for (let j = 0; j<this.num_rows; j++){
-            if (this.rowlist[j].checkEndGame()){
-                return j;
-            }
+        console.log(" check endgame");
+
+        if (this.rowlist[0].checkEndGame()){
+            console.log("game will wnd 0");
+            this.rowlist[1].endGame();
+            return 1;
         }
-        
-        return -1;
+        else if (this.rowlist[1].checkEndGame()){
+            console.log("game will wnd 1");
+            this.rowlist[0].endGame();
+            return 1;
+        }
+        return 0;
+
+
     }
 
     play(index){
         let player;
         let currRow = 0;
-        console.log("oi "+ index);
         if (index >= (this.num_holes)){
             currRow = 1;
             index = index - this.num_holes;
@@ -49,6 +56,7 @@ export class Board {
         else player = 2;
         let beansToDistribute = this.rowlist[currRow].getBeans(index);
         if (beansToDistribute == 0) return -1;
+
         while (beansToDistribute>0){
             beansToDistribute = this.rowlist[currRow].distributeBeans(index, beansToDistribute, player);
             if (beansToDistribute < 0) {

@@ -32,8 +32,24 @@ export class Row {
             if (this.holelist[i].getNumBeans() != 0)
                 return false;
         }
+
         return true;
     }
+    async endGame(){
+
+        await sleep(2500).then(() => {
+            for (let i = 0; i<this.num_holes; i++){
+                console.log("stealing bean "+ this.row_index + "hole " + i);
+                for (let j = 0; j < this.holelist[i].getNumBeans(); j++){
+                    console.log("deleting bean " +j+ "on hole "+i);
+                    new Bean(-1, this.row_index);
+                }
+                this.holelist[i].spreadBeans();
+            
+            }
+        });
+    }
+
     distributeBeans(index, beansToDistribute, player){
         let conditionToSteal = (player == this.row_index) || (player == 2 && this.row_index == 0);
         console.log("row" + this.row_index + " index " + index);

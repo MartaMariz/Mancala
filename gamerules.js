@@ -9,24 +9,33 @@ export class gameRules {
         for (let i = this.board.num_holes; i < holes.length; i++){
             holes[i].addEventListener("click", async function(){
 
+                let gameState ;
                 Playagain = board.play(i);
-                let gameState = board.endGame();
 
-                if (gameState!= -1){
-                    showFinalResults();
+                gameState = board.endGame();
+
+                if (gameState == 1) {
+                    await sleep(25000).then(() => { console.log("IM ENDING ");});
                 }
 
-                console.log("Play again "+ Playagain);
-                if (Playagain == 0 || Playagain == 2){
-                    disableClick(this.board);
+                console.log("Play again " + Playagain);
+                if (Playagain == 0 || Playagain == 2 ){
+                    disableClick(board);
                     await sleep(2500).then(() => {
                         do {
                             Playagain = aiMove(ai_level, board);
                         }while (Playagain == -1 || Playagain == 2);
-                        if (this.board.endGame())
-                            showFinalResults();
+                        gameState = board.endGame();
+
+                        if (gameState == 1) {
+                            await sleep(25000).then(() => { console.log("IM ENDING ");});
+                        }
+
                     });
-                     enableClick(this.board);
+                     enableClick(board);
+                }
+                else{
+                    console.log("try again jogada merdosa");
                 }
                 
             });
@@ -64,6 +73,7 @@ function enableClick(board){
 function aiMove(ai_level, board){
     if (ai_level == 1){
         let index = Math.floor(Math.random()*board.num_holes);
+        console.log("oi sou o ai joguei index " + index);
         return board.play(index); 
     }
     else {
