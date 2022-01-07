@@ -27,6 +27,16 @@ export class Board {
         }
     }
 
+    endGame(){
+        for (let j = 0; j<this.num_rows; j++){
+            if (this.rowlist[j].checkEndGame()){
+                return j;
+            }
+        }
+        
+        return -1;
+    }
+
     play(index){
         let player;
         let currRow = 0;
@@ -38,6 +48,7 @@ export class Board {
         }
         else player = 2;
         let beansToDistribute = this.rowlist[currRow].getBeans(index);
+        if (beansToDistribute == 0) return -1;
         while (beansToDistribute>0){
             beansToDistribute = this.rowlist[currRow].distributeBeans(index, beansToDistribute, player);
             if (beansToDistribute < 0) {
@@ -52,6 +63,7 @@ export class Board {
                     beansToDistribute--;
                     currRow = 1;
                     index = -1;
+                    if (beansToDistribute == 0 ) return 2;
                 }
                 else {
                     new Bean(-1, 1);
@@ -59,11 +71,13 @@ export class Board {
                     beansToDistribute--;
                     currRow = 0;
                     index = this.num_holes;
+                    if (beansToDistribute == 0 ) return 1;
                 }
             
             }
             console.log(beansToDistribute);
         }
+        return 0;
         
     }
 
@@ -77,7 +91,9 @@ export class Board {
             toSteal = index;
             this.rowlist[0].stealBeans(toSteal);
         }
-        console.log("stole from index " + toSteal);
+        sleep(1000).then(() => {
+            console.log("stole from index " + toSteal);
+        });
     }
 
     simulateplay(index){

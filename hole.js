@@ -29,6 +29,9 @@ export class Hole {
         this.beanlist.push(bean);
         console.log("adding bean to "+ this.html_id);
     }
+    getNumBeans(){
+        return this.num_beans;
+    }
 
     spreadBeans(){
         let beansToDistribute = this.num_beans;

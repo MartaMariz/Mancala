@@ -4,17 +4,45 @@ export class gameRules {
         this.board = board;
         this.ai_level = ai_level;
         let holes = document.getElementsByClassName("hole");
+        let Playagain;
         console.log("length dos holes é " + holes.length);
         for (let i = this.board.num_holes; i < holes.length; i++){
             holes[i].addEventListener("click", async function(){
-                board.play(i);
-                disableClick(board);
-                await sleep(2000).then(() => {
-                    aiMove(ai_level, board);
-                });
-                enableClick(board);
+
+                Playagain = board.play(i);
+                let gameState = board.endGame();
+
+                if (gameState!= -1){
+                    showFinalResults();
+                }
+
+                console.log("Play again "+ Playagain);
+                if (Playagain == 0 || Playagain == 2){
+                    disableClick(this.board);
+                    await sleep(2500).then(() => {
+                        do {
+                            Playagain = aiMove(ai_level, board);
+                        }while (Playagain == -1 || Playagain == 2);
+                        if (this.board.endGame())
+                            showFinalResults();
+                    });
+                     enableClick(this.board);
+                }
+                
             });
         }
+    }
+
+    waitforNextPlayer(Playagain){
+        
+   }
+
+    showFinalResults(){
+        apagarBoard();
+        apagarLogIn();
+        apagarSignUp();
+        apagarConfig();
+        document.getElementById("instrucoes").style.display = "block";
     }
 
 }
@@ -36,9 +64,11 @@ function enableClick(board){
 function aiMove(ai_level, board){
     if (ai_level == 1){
         let index = Math.floor(Math.random()*board.num_holes);
-        board.play(5);
+        return board.play(index); 
     }
-    else smartAI(board);
+    else {
+        smartAI(board);
+    }
 }
 
 function smartAI(board){

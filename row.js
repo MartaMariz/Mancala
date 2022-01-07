@@ -27,6 +27,13 @@ export class Row {
     getBeans(index){
         return this.holelist[index].spreadBeans();
     }
+    checkEndGame(){
+        for (let i = 0; i<this.num_holes; i++){
+            if (this.holelist[i].getNumBeans() != 0)
+                return false;
+        }
+        return true;
+    }
     distributeBeans(index, beansToDistribute, player){
         let conditionToSteal = (player == this.row_index) || (player == 2 && this.row_index == 0);
         console.log("row" + this.row_index + " index " + index);
