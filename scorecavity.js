@@ -3,8 +3,8 @@ import {Bean} from './bean.js';
 export class ScoreCavity {
     constructor(player){
         this.player = player;
-        if (player==1) this.htmlid = "player-one"
-        else this.htmlid = "player-two"
+        if (player==1) this.html_id = "player-one"
+        else this.html_id = "player-two"
         this.beanlist = [];
         this.num_beans = 0;
     }
@@ -12,12 +12,17 @@ export class ScoreCavity {
         let bean = new Bean(-1, this.player);
         this.num_beans++;
         this.beanlist.push(bean);
-        const beancount = document.getElementById("countbean-"+this.htmlid);
+        const beancount = document.getElementById("countbean-"+this.html_id);
         beancount.innerHTML = this.num_beans;
 
         console.log("adding bean to "+ this.html_id);
     }
+    
     getNumBeans(){
         return this.num_beans;
+    }
+
+    getPlayer(){
+        return this.player;
     }
 }

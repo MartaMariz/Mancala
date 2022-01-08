@@ -121,6 +121,18 @@ export class Board {
         else this.scorecavity2.addBean();
     }
 
+    countPoints(){
+        if (this.scorecavity1.getNumBeans() > this.scorecavity2.getNumBeans())
+            return 1;
+        else if (this.scorecavity1.getNumBeans() < this.scorecavity2.getNumBeans())
+            return 2;
+        else return 3;
+    }
+
+    clearBoard(){
+        this.createBoard();
+    }
+
 }
 
 function sleep (time) {

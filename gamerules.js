@@ -1,28 +1,31 @@
 
 export class gameRules {
-    constructor(board, ai_level){
+    constructor(board, ai_level, starts, op){
         this.board = board;
         this.ai_level = ai_level;
+        this.starts = starts;
         let holes = document.getElementsByClassName("hole");
-        let play_again;
-        console.log("length dos holes é " + holes.length);
+        let play_again = 0;
+        if (starts == 2 && op == "ai") waitforAI(board, ai_level);
         for (let i = this.board.num_holes; i < holes.length; i++){
-             holes[i].addEventListener("click", async function(){
+            holes[i].addEventListener("click", async function(){
 
-                let gameState ;
+                let game_state;
                 play_again = board.play(i);
 
-                gameState = board.endGame();
+                game_state = board.endGame();
 
-                if (gameState == 1) {
+                if (game_state == 1) {
                     console.log("GAME OVER PUTAS");
+                    gameOver(board);
                     return 0;
                 }
 
                 console.log("Play again " + play_again);
                 if (play_again == 0 || play_again == 2 ){
                     disableClick(board);
-                    waitforNextPlayer(board, ai_level, play_again, gameState);
+                    if (op == "ai")
+                        waitforAI(board, ai_level);
                 }
                 else{
                     console.log("try again jogada merdosa");
@@ -78,20 +81,30 @@ function smartAI(board){
 }
 
 
-async function waitforNextPlayer(board, ai_level, play_again, gameState){
+async function waitforAI(board, ai_level){
+    let play_again;
+    let game_state;
     await sleep(2500).then(() => {
         do {
             play_again = aiMove(ai_level, board);
-        }while (play_again == -1 || play_again == 2);
-        gameState = board.endGame();
-        if (gameState == 1) {
+        } while (play_again == -1 || play_again == 2);
+        game_state = board.endGame();
+        if (game_state == 1) {
             console.log("GAME OVER PUTAS");
+            gameOver(board);
             return 0;
         }
-
-     
     });
-     enableClick(board);
+    enableClick(board);
+}
+
+async function gameOver(board){
+    await sleep(4000).then(() => {
+        let winner = board.countPoints()
+        if (winner == 3) alert("It was a tie!");
+        else alert("Player" + winner + " won!");
+    });
+    board.clearBoard();
 }
 
 function sleep (time) {
