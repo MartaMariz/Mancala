@@ -16,7 +16,7 @@ export class Hole {
         hole.setAttribute("class", "hole");
         hole.setAttribute("id", this.html_id);
         row.appendChild(hole);
-            
+
         for(let k = 0; k<this.num_beans; k++) {
             let bean = new Bean(this.row_index, this.hole_index);
             this.beanlist[k] = bean;
@@ -27,6 +27,10 @@ export class Hole {
         let bean = new Bean(this.row_index, this.hole_index);
         this.num_beans++;
         this.beanlist.push(bean);
+        const beancount = document.getElementById("countbean"+(this.row_index).toString()+this.hole_index.toString());
+        beancount.innerHTML = this.num_beans;
+
+
         console.log("adding bean to "+ this.html_id);
     }
     getNumBeans(){
@@ -43,6 +47,8 @@ export class Hole {
 
         this.beanlist = [];
         this.num_beans = 0;
+        const beancount = document.getElementById("countbean"+(this.row_index).toString()+this.hole_index.toString());
+        beancount.innerHTML = this.num_beans;
         return beansToDistribute;
     }
 }

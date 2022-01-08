@@ -1,5 +1,6 @@
 import {Row} from './row.js';
 import {Bean} from './bean.js';
+import { ScoreCavity } from './scorecavity.js';
 
 export class Board {
     constructor(num_holes, num_beans, html_id){
@@ -8,6 +9,8 @@ export class Board {
         this.num_beans = num_beans;
         this.num_rows = 2;
         this.rowlist = [];
+        this.scorecavity1 = new ScoreCavity(1);
+        this.scorecavity2 = new ScoreCavity(2); 
         this.createBoard();
     }
     
@@ -22,7 +25,7 @@ export class Board {
             rows.removeChild(rows.firstChild);
         }
         for (let j = 0; j<this.num_rows; j++){
-            let row = new Row(j, this.num_holes, this.num_beans);
+            let row = new Row(j, this.num_holes, this.num_beans, this);
             this.rowlist[j] = row;
         }
     }
@@ -66,7 +69,7 @@ export class Board {
             }
             if (beansToDistribute>0){
                 if (currRow == 0) {
-                    new Bean(-1, 2);
+                    this.scorecavity2.addBean();
                     console.log("adding bean to player-two");
                     beansToDistribute--;
                     currRow = 1;
@@ -74,7 +77,7 @@ export class Board {
                     if (beansToDistribute == 0 ) return 2;
                 }
                 else {
-                    new Bean(-1, 1);
+                    this.scorecavity1.addBean();
                     console.log("adding bean to player-one");
                     beansToDistribute--;
                     currRow = 0;
@@ -111,6 +114,11 @@ export class Board {
         this.play(index);
         points = document.getElementById("player-two").childElementCount - previouspoints;
         return points;
+    }
+
+    givebean(player){
+        if (player == 1) this.scorecavity1.addBean();
+        else this.scorecavity2.addBean();
     }
 
 }

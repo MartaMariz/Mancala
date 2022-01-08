@@ -14,6 +14,7 @@ export class Bean {
 
     createBean(){
         const cavity = document.getElementById(this.cavityId);
+        
         let bean = document.createElement("div");
         bean.setAttribute("class", "bean");
         let topStr = "top: " + Math.floor( Math.random() * 60).toString() + "%;";

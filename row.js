@@ -3,11 +3,12 @@ import {Hole} from './hole.js';
 
 
 export class Row {
-    constructor(row_index, num_holes, num_beans){
+    constructor(row_index, num_holes, num_beans, board){
         this.html_id = "row"+row_index.toString();
         this.row_index = row_index;
         this.num_holes = num_holes;
         this.num_beans = num_beans;
+        this.board = board;
         this.holelist = [];
         this.createRow();
     }
@@ -22,6 +23,19 @@ export class Row {
             let hole = new Hole(this.row_index, i, this.num_beans);
             this.holelist[i] = hole;
         }
+
+        let counter = document.createElement("div");
+        counter.setAttribute("class", "counter");
+        rows.appendChild(counter);
+
+        for(let i = 0; i<this.num_holes; i++) {
+            let beans = document.createElement("div");
+            beans.setAttribute("class", "countbean");
+            beans.innerHTML = this.num_beans;
+            beans.setAttribute("id", "countbean"+this.row_index.toString()+i.toString());
+            counter.appendChild(beans);
+        }
+
         
     }
     getBeans(index){
@@ -42,7 +56,7 @@ export class Row {
                 console.log("stealing bean "+ this.row_index + "hole " + i);
                 for (let j = 0; j < this.holelist[i].getNumBeans(); j++){
                     console.log("deleting bean " +j+ "on hole "+i);
-                    new Bean(-1, this.row_index);
+                    this.board.givebean(this.row_index);
                 }
                 this.holelist[i].spreadBeans();
             
@@ -72,7 +86,8 @@ export class Row {
                 
                 let player = this.row_index;
                 sleep(2000).then(() => {
-                    new Bean(-1, player);
+                    this.board.givebean(player);
+
                 });
                 
                 beansToDistribute = currIndex*(-1);
@@ -88,7 +103,7 @@ export class Row {
     stealBeans(index){
         let player = this.row_index + 1;
         for (let i = 1; i <= this.holelist[index].beanlist.length; i++)
-            new Bean(-1, player);
+        this.board.givebean(player);
         this.holelist[index].spreadBeans();
     }
 }
