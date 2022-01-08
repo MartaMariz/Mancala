@@ -35,7 +35,7 @@ export class Board {
             this.rowlist[1].endGame();
             return 1;
         }
-        else if (this.rowlist[1].checkEndGame()){
+        if (this.rowlist[1].checkEndGame()){
             console.log("game will wnd 1");
             this.rowlist[0].endGame();
             return 1;

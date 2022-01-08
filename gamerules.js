@@ -7,7 +7,7 @@ export class gameRules {
         let Playagain;
         console.log("length dos holes é " + holes.length);
         for (let i = this.board.num_holes; i < holes.length; i++){
-            holes[i].addEventListener("click", async function(){
+             holes[i].addEventListener("click", async function(){
 
                 let gameState ;
                 Playagain = board.play(i);
@@ -15,21 +15,14 @@ export class gameRules {
                 gameState = board.endGame();
 
                 if (gameState == 1) {
-                    await sleep(25000).then(() => { console.log("IM ENDING ");});
+                    console.log("GAME OVER PUTAS");
+                    return 0;
                 }
 
                 console.log("Play again " + Playagain);
                 if (Playagain == 0 || Playagain == 2 ){
                     disableClick(board);
-                    await sleep(2500).then(() => {
-                        do {
-                            Playagain = aiMove(ai_level, board);
-                        }while (Playagain == -1 || Playagain == 2);
-                        gameState = board.endGame();
-
-                       
-                    });
-                     enableClick(board);
+                    waitforNextPlayer(board);
                 }
                 else{
                     console.log("try again jogada merdosa");
@@ -39,7 +32,20 @@ export class gameRules {
         }
     }
 
-    waitforNextPlayer(Playagain){
+    async waitforNextPlayer(board){
+        await sleep(2500).then(() => {
+            do {
+                Playagain = aiMove(ai_level, board);
+            }while (Playagain == -1 || Playagain == 2);
+            gameState = board.endGame();
+            if (gameState == 1) {
+                console.log("GAME OVER PUTAS");
+                return 0;
+            }
+
+         
+        });
+         enableClick(board);
         
    }
 
