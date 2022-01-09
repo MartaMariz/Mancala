@@ -1,5 +1,4 @@
 import {Row} from './row.js';
-import {Bean} from './bean.js';
 import { ScoreCavity } from './scorecavity.js';
 
 export class Board {
@@ -49,70 +48,64 @@ export class Board {
             return 1;
         }
         return 0;
-
-
     }
 
     play(index){
         let player;
-        let currRow = 0;
+        let curr_row = 0;
         if (index >= (this.num_holes)){
-            currRow = 1;
+            curr_row = 1;
             index = index - this.num_holes;
             player = 1;
         }
         else player = 2;
-        let beansToDistribute = this.rowlist[currRow].getBeans(index);
-        if (beansToDistribute == 0) return -1;
+        let beans_to_distribute = this.rowlist[curr_row].getBeans(index);
+        if (beans_to_distribute == 0) return -1;
 
-        while (beansToDistribute>0){
-            beansToDistribute = this.rowlist[currRow].distributeBeans(index, beansToDistribute, player);
-            if (beansToDistribute < 0) {
+        while (beans_to_distribute>0){
+            beans_to_distribute = this.rowlist[curr_row].distributeBeans(index, beans_to_distribute, player);
+            let condition_to_steal = (player == curr_row) || (player == 2 && curr_row == 0);
+            if (beans_to_distribute < 0 && condition_to_steal) {
                 sleep(2000).then(() => {
-                    this.stealBeans(beansToDistribute*(-1), player);
+                    this.stealBeans((beans_to_distribute+1)*(-1), player);
                 });
             }
-            if (beansToDistribute>0){
-                if (currRow == 0) {
+            if (beans_to_distribute>0){
+                if (curr_row == 0) {
                     this.scorecavity2.addBean();
                     console.log("adding bean to player-two");
-                    beansToDistribute--;
-                    currRow = 1;
+                    beans_to_distribute--;
+                    curr_row = 1;
                     index = -1;
-                    if (beansToDistribute == 0 ) return 2;
+                    if (beans_to_distribute == 0 ) return 2;
                 }
                 else {
                     this.scorecavity1.addBean();
                     console.log("adding bean to player-one");
-                    beansToDistribute--;
-                    currRow = 0;
+                    beans_to_distribute--;
+                    curr_row = 0;
                     index = this.num_holes;
-                    if (beansToDistribute == 0 ) return 1;
+                    if (beans_to_distribute == 0 ) return 1;
                 }
             
             }
-            console.log(beansToDistribute);
+            console.log(beans_to_distribute);
         }
         return 0;
         
     }
 
     stealBeans(index, player){
-        let toSteal;
-        if (index >= (this.num_holes) && player == 2){
-            toSteal = index - this.num_holes;
-            this.rowlist[1].stealBeans(toSteal);
+        if (player == 2){
+            this.rowlist[1].stealBeans(index);
         }
-        else if (index < (this.num_holes) && player == 1){
-            toSteal = index;
-            this.rowlist[0].stealBeans(toSteal);
+        else {
+            this.rowlist[0].stealBeans(index);
         }
-        sleep(1000).then(() => {
-            console.log("stole from index " + toSteal);
-        });
+        console.log(player + "stole from index " + index);
     }
 
-    simulateplay(index){
+    simulatePlay(index){
         let points;
         let previouspoints = document.getElementById("player-two").childElementCount;
         console.log("index " + index + " prevpoints "+ previouspoints);
@@ -121,7 +114,7 @@ export class Board {
         return points;
     }
 
-    givebean(player){
+    giveBean(player){
         if (player == 1) this.scorecavity1.addBean();
         else this.scorecavity2.addBean();
     }

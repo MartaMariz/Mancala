@@ -5,12 +5,19 @@ export class gameRules {
         this.ai_level = ai_level;
         this.starts = starts;
         let holes = document.getElementsByClassName("hole");
-        let play_again = 0;
+        let play_again;
+        let game_state;
         if (starts == 2 && op == "ai") waitforAI(board, ai_level);
         for (let i = this.board.num_holes; i < holes.length; i++){
             holes[i].addEventListener("click", async function(){
 
-                let game_state;
+                game_state = board.endGame();
+                if (game_state == 1) {
+                    console.log("GAME OVER PUTAS");
+                    gameOver(board);
+                    return 0;
+                }
+
                 play_again = board.play(i);
 
                 game_state = board.endGame();
@@ -20,15 +27,11 @@ export class gameRules {
                     gameOver(board);
                     return 0;
                 }
-
-                console.log("Play again " + play_again);
-                if (play_again == 0 || play_again == 2 ){
+                if (play_again != -1 && play_again != 1 && game_state == 0){
                     disableClick(board);
                     if (op == "ai")
                         waitforAI(board, ai_level);
-                }
-                else{
-                    console.log("try again jogada merdosa");
+                    enableClick(board);
                 }
                 
             });
@@ -74,7 +77,7 @@ function smartAI(board){
     //let holes = document.getElementsByClassName("hole");
     let points = [];
     for (let i = 0; i < board.num_holes; i++){
-        points[i] = board.simulateplay(i);
+        points[i] = board.simulatePlay(i);
     }
     let index = points.indexOf(Math.max(points));
     board.play(index)
@@ -87,15 +90,20 @@ async function waitforAI(board, ai_level){
     await sleep(2500).then(() => {
         do {
             play_again = aiMove(ai_level, board);
-        } while (play_again == -1 || play_again == 2);
-        game_state = board.endGame();
+            game_state = board.endGame();
+        } while ((play_again == -1 || play_again == 2) && game_state == 0);
+
         if (game_state == 1) {
             console.log("GAME OVER PUTAS");
             gameOver(board);
-            return 0;
         }
     });
-    enableClick(board);
+    game_state = board.endGame();
+    if (game_state == 1) {
+        console.log("GAME OVER PUTAS");
+        gameOver(board);
+        return 0;
+    }
 }
 
 async function gameOver(board){

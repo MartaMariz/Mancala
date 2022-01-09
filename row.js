@@ -56,7 +56,7 @@ export class Row {
                 console.log("stealing bean "+ this.row_index + "hole " + i);
                 for (let j = 0; j < this.holelist[i].getNumBeans(); j++){
                     console.log("deleting bean " +j+ "on hole "+i);
-                    this.board.givebean(this.row_index);
+                    this.board.giveBean(this.row_index);
                 }
                 this.holelist[i].spreadBeans();
             
@@ -86,11 +86,11 @@ export class Row {
                 
                 let player = this.row_index;
                 sleep(2000).then(() => {
-                    this.board.givebean(player);
+                    this.board.giveBean(player);
 
                 });
                 
-                beansToDistribute = currIndex*(-1);
+                beansToDistribute = (currIndex+1)*(-1);
                 return beansToDistribute;
             }
             currIndex = currIndex + dir;
@@ -103,7 +103,7 @@ export class Row {
     stealBeans(index){
         let player = this.row_index + 1;
         for (let i = 1; i <= this.holelist[index].beanlist.length; i++)
-        this.board.givebean(player);
+            this.board.giveBean(player);
         this.holelist[index].spreadBeans();
     }
 }
