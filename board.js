@@ -15,6 +15,11 @@ export class Board {
     }
     
     createBoard(){
+        let counter = document.getElementById("countbean-player-two");
+        counter.innerHTML = 0;
+        counter = document.getElementById("countbean-player-one");
+        counter.innerHTML = 0;
+
         let scorecavity = document.getElementById("player-two");
         while(scorecavity.firstChild) scorecavity.removeChild(scorecavity.firstChild);
         scorecavity = document.getElementById("player-one");
