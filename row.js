@@ -38,7 +38,10 @@ export class Row {
 
         
     }
-    getBeans(index){
+    getNumBeans(index){
+        return this.holelist[index].num_beans;
+    }
+    emptyHole(index){
         return this.holelist[index].spreadBeans();
     }
     checkEndGame(){
@@ -63,6 +66,24 @@ export class Row {
             }
         });
     }
+    simulateDistributeBeans(index, beansToDistribute){
+        let dir = this.row_index;
+        let maxIndex = this.num_holes;
+        if (this.row_index == 0) {
+            dir = -1;
+            maxIndex = -1;
+        }
+        let currIndex = index + dir;
+        while (currIndex != maxIndex && beansToDistribute > 0){
+            currIndex = currIndex + dir;
+            beansToDistribute --;
+        }
+        console.log("SIMULATE DISTRIBUTE BEANS");
+        return beansToDistribute;
+
+
+    }
+
 
     distributeBeans(index, beansToDistribute, player){
         let conditionToSteal = (player == this.row_index) || (player == 2 && this.row_index == 0);

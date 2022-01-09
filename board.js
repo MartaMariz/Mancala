@@ -50,6 +50,47 @@ export class Board {
         return 0;
     }
 
+    simulatePlay(index){
+        console.log("estou simulating");
+        let points = 0;
+        let curr_row = 0;
+        if (index >= (this.num_holes)){
+            curr_row = 1;
+            index = index - this.num_holes;
+        }
+        let beans_to_distribute = this.rowlist[curr_row].getNumBeans(index);
+        if (beans_to_distribute == 0) return -1;
+        console.log("estou no simulate plau");
+
+        while (beans_to_distribute>0){ //
+            beans_to_distribute = this.rowlist[curr_row].simulateDistributeBeans(index, beans_to_distribute);
+            console.log("estou no cenitas");
+
+            //steal beans
+            if (beans_to_distribute>0){
+                if (curr_row == 0) {
+                    points++;
+                    beans_to_distribute--;
+                    curr_row = 1;
+                    index = -1;
+                    if (beans_to_distribute == 0 ) {
+                        return 10;
+                    }
+                }
+                else {
+                    points--;
+                    beans_to_distribute--;
+                    curr_row = 0;
+                    index = this.num_holes;
+                }
+            
+            }
+        }
+
+        return points;
+
+    }
+
     play(index){
         let player;
         let curr_row = 0;
@@ -58,11 +99,11 @@ export class Board {
             index = index - this.num_holes;
             player = 1;
         }
-        else player = 2;
-        let beans_to_distribute = this.rowlist[curr_row].getBeans(index);
+        else player = 2;//get row get player
+        let beans_to_distribute = this.rowlist[curr_row].emptyHole(index);
         if (beans_to_distribute == 0) return -1;
 
-        while (beans_to_distribute>0){
+        while (beans_to_distribute>0){ //
             beans_to_distribute = this.rowlist[curr_row].distributeBeans(index, beans_to_distribute, player);
             let condition_to_steal = (player == curr_row) || (player == 2 && curr_row == 0);
             if (beans_to_distribute < 0 && condition_to_steal) {
@@ -105,14 +146,6 @@ export class Board {
         console.log(player + "stole from index " + index);
     }
 
-    simulatePlay(index){
-        let points;
-        let previouspoints = document.getElementById("player-two").childElementCount;
-        console.log("index " + index + " prevpoints "+ previouspoints);
-        this.play(index);
-        points = document.getElementById("player-two").childElementCount - previouspoints;
-        return points;
-    }
 
     giveBean(player){
         if (player == 1) this.scorecavity1.addBean();
