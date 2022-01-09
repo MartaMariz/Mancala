@@ -14,7 +14,7 @@ class Game{
     }
 
     newGame(){
-        this.board = new Board(this.num_holes, this.num_beans, "board");
+        this.board = new Board(this.num_holes, this.num_beans, "board", this);
         this.game_rules = new gameRules(this.board, this.ai_level, this.starts, this.opponent);
     }
     

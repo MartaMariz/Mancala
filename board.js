@@ -2,11 +2,12 @@ import {Row} from './row.js';
 import { ScoreCavity } from './scorecavity.js';
 
 export class Board {
-    constructor(num_holes, num_beans, html_id){
+    constructor(num_holes, num_beans, html_id, game){
         this.html_id = html_id;
         this.num_holes = num_holes;
         this.num_beans = num_beans;
         this.num_rows = 2;
+        this.game = game;
         this.rowlist = [];
         this.scorecavity1 = new ScoreCavity(1);
         this.scorecavity2 = new ScoreCavity(2); 
@@ -161,7 +162,7 @@ export class Board {
     }
 
     clearBoard(){
-        this.createBoard();
+        this.game.newGame();
     }
 
 }
