@@ -87,7 +87,6 @@ export class Row {
                 let player = this.row_index;
                 sleep(2000).then(() => {
                     this.board.giveBean(player);
-
                 });
                 
                 beansToDistribute = (currIndex+1)*(-1);

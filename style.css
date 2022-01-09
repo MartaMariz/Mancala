@@ -115,9 +115,14 @@ button#novojogo:hover, button#botao_login:hover, button#botao_signup:hover, butt
   height: 0.1px;
 }
 
-.counter#player{
-  display: block;
-  
+.scores{
+  flex: 1 1;
+	display: flex;
+	flex-direction: column;
+}
+
+#countbean-player-two, #countbean-player-one {
+  text-align: center;
 }
 
 .hole, .scorecavity {
