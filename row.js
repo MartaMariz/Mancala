@@ -12,6 +12,7 @@ export class Row {
         this.holelist = [];
         this.createRow();
     }
+
     createRow(){
         const rows = document.getElementById("rows");
         let row = document.createElement("div");
@@ -38,12 +39,15 @@ export class Row {
 
         
     }
+
     getNumBeans(index){
         return this.holelist[index].num_beans;
     }
+
     emptyHole(index){
         return this.holelist[index].spreadBeans();
     }
+
     checkEndGame(){
         for (let i = 0; i<this.num_holes; i++){
             if (this.holelist[i].getNumBeans() != 0)
@@ -52,6 +56,7 @@ export class Row {
 
         return true;
     }
+
     async endGame(){
 
         await sleep(2500).then(() => {
@@ -66,43 +71,49 @@ export class Row {
             }
         });
     }
-    simulateDistributeBeans(index, beansToDistribute){
+
+    simulateDistributeBeans(index, beans_to_distribute){
         let dir = this.row_index;
-        let maxIndex = this.num_holes;
+        let max_index = this.num_holes;
         if (this.row_index == 0) {
             dir = -1;
-            maxIndex = -1;
+            max_index = -1;
         }
-        let currIndex = index + dir;
-        while (currIndex != maxIndex && beansToDistribute > 0){
-            currIndex = currIndex + dir;
-            beansToDistribute --;
-        }
-        console.log("SIMULATE DISTRIBUTE BEANS");
-        return beansToDistribute;
+        let curr_index = index + dir;
 
+        while (curr_index != max_index && beans_to_distribute > 0){
+            let condition_to_steal = beans_to_distribute == 1 && this.holelist[curr_index].num_beans == 0 && this.row_index == 0;
+            if (condition_to_steal) {
+                beans_to_distribute = (curr_index+1)*(-1);
+                console.log(beans_to_distribute);
+                return beans_to_distribute;
+            }
+
+            curr_index = curr_index + dir;
+            beans_to_distribute --;
+        }
+        return beans_to_distribute;
 
     }
 
-
-    distributeBeans(index, beansToDistribute, player){
-        let conditionToSteal = (player == this.row_index) || (player == 2 && this.row_index == 0);
+    distributeBeans(index, beans_to_distribute, player){
+        let condition_to_steal = (player == this.row_index) || (player == 2 && this.row_index == 0);
         console.log("row" + this.row_index + " index " + index);
         let dir = this.row_index;
-        let maxIndex = this.num_holes;
+        let max_index = this.num_holes;
         if (this.row_index == 0) {
             dir = -1;
-            maxIndex = -1;
+            max_index = -1;
         }
-        let currIndex = index + dir;
+        let curr_index = index + dir;
 
-        while (currIndex != maxIndex && beansToDistribute > 0){
-            console.log("curr "+ currIndex);
-            this.holelist[currIndex].addBean();
+        while (curr_index != max_index && beans_to_distribute > 0){
+            console.log("curr "+ curr_index);
+            this.holelist[curr_index].addBean();
             
-            if (beansToDistribute == 1 &&  this.holelist[currIndex].num_beans == 1 && conditionToSteal){
+            if (beans_to_distribute == 1 &&  this.holelist[curr_index].num_beans == 1 && condition_to_steal){
                 sleep(2000).then(() => {
-                    this.holelist[currIndex].spreadBeans();
+                    this.holelist[curr_index].spreadBeans();
                 });
                 
                 let player = this.row_index;
@@ -110,21 +121,26 @@ export class Row {
                     this.board.giveBean(player);
                 });
                 
-                beansToDistribute = (currIndex+1)*(-1);
-                return beansToDistribute;
+                beans_to_distribute = (curr_index+1)*(-1);
+                return beans_to_distribute;
             }
-            currIndex = currIndex + dir;
-            beansToDistribute --;
+            curr_index = curr_index + dir;
+            beans_to_distribute --;
             
         }
         
-        return beansToDistribute;
+        return beans_to_distribute;
     }
+
     stealBeans(index){
         let player = this.row_index + 1;
         for (let i = 1; i <= this.holelist[index].beanlist.length; i++)
             this.board.giveBean(player);
         this.holelist[index].spreadBeans();
+    }
+
+    simulateStealBeans(index){
+        return this.holelist[index].beanlist.length;
     }
 }
 

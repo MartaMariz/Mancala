@@ -66,32 +66,34 @@ function aiMove(ai_level, board){
         return board.play(index); 
     }
     else {
-        let index = smartAI(board);
+        let index = smartAI(board, ai_level);
         console.log("o melhor index é " + index);
         return board.play(index);
     }
 }
 
-function smartAI(board){
+function smartAI(board, ai_level){
     console.log("AI PLAYNG");
     let points = 0;
-    let currpoints;
-    let bestMove;
-    for(let i = 0 ; i<board.num_holes; i++){
+    let curr_points;
+    let best_move;
+    for(let i = 0 ; i< board.num_holes; i++){
         console.log("CHECAR PINTS");
 
-        currpoints = board.simulatePlay(i);
-        if (currpoints>= points){
-            points = currpoints;
-            bestMove = i;
+        curr_points = board.simulatePlay(i, ai_level);
+        if (curr_points >= points){
+            points = curr_points;
+            best_move = i;
         }
     }
     if (points == 0){
         console.log("olha fodasse");
-        bestMove =Math.floor(Math.random()*board.num_holes);;
+        best_move = Math.floor(Math.random()*board.num_holes);
     }
-    return bestMove;
+    return best_move;
 }
+
+
 
 
 async function waitforAI(board, ai_level){
@@ -99,12 +101,12 @@ async function waitforAI(board, ai_level){
     let game_state;
     do {
         await sleep(2500).then(() => {
-
+            
             do {
                 play_again = aiMove(ai_level, board);
                 game_state = board.endGame();
-            }while (play_again==-1);
-            enableClick(board);
+            } while (play_again == -1);
+            if (play_again == 0 || play_again == 1) enableClick(board);
         });
 
     } while ( play_again == 2 && game_state == 0);
