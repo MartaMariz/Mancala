@@ -103,7 +103,6 @@ async function waitforAI(board, ai_level){
     let game_state;
     do {
         await sleep(2500).then(() => {
-            
             do {
                 play_again = aiMove(ai_level, board);
                 game_state = board.endGame();

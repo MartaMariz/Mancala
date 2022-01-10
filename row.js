@@ -36,8 +36,6 @@ export class Row {
             beans.setAttribute("id", "countbean"+this.row_index.toString()+i.toString());
             counter.appendChild(beans);
         }
-
-        
     }
 
     getNumBeans(index){
@@ -57,6 +55,16 @@ export class Row {
         return true;
     }
 
+    getDir(){
+        if (this.row_index) return 1;
+        else return -1;
+    }
+
+    getMaxIndex(){
+        if (this.row_index) return this.num_holes;
+        else return -1
+    }
+
     async endGame(){
 
         await sleep(2500).then(() => {
@@ -73,12 +81,9 @@ export class Row {
     }
 
     simulateDistributeBeans(index, beans_to_distribute){
-        let dir = this.row_index;
-        let max_index = this.num_holes;
-        if (this.row_index == 0) {
-            dir = -1;
-            max_index = -1;
-        }
+        let dir = this.getDir();
+        let max_index = this.getMaxIndex();
+
         let curr_index = index + dir;
 
         while (curr_index != max_index && beans_to_distribute > 0){
@@ -98,38 +103,41 @@ export class Row {
 
     distributeBeans(index, beans_to_distribute, player){
         let condition_to_steal = (player == this.row_index) || (player == 2 && this.row_index == 0);
-        console.log("row" + this.row_index + " index " + index);
-        let dir = this.row_index;
-        let max_index = this.num_holes;
-        if (this.row_index == 0) {
-            dir = -1;
-            max_index = -1;
-        }
+
+        let dir = this.getDir();
+        let max_index = this.getMaxIndex();
+
         let curr_index = index + dir;
 
         while (curr_index != max_index && beans_to_distribute > 0){
-            console.log("curr "+ curr_index);
             this.holelist[curr_index].addBean();
             
             if (beans_to_distribute == 1 &&  this.holelist[curr_index].num_beans == 1 && condition_to_steal){
-                sleep(2000).then(() => {
-                    this.holelist[curr_index].spreadBeans();
-                });
+                this.spreadBeans(curr_index);
                 
                 let player = this.row_index;
-                sleep(2000).then(() => {
-                    this.board.giveBean(player);
-                });
+                this.giveBeans(player);
                 
                 beans_to_distribute = (curr_index+1)*(-1);
                 return beans_to_distribute;
             }
             curr_index = curr_index + dir;
             beans_to_distribute --;
-            
         }
         
         return beans_to_distribute;
+    }
+
+    async giveBeans(player){
+        await sleep(2000).then(() => {
+            this.board.giveBean(player);
+        });
+    }
+
+    async spreadBeans(index){
+        await sleep(2000).then(() => {
+            this.holelist[index].spreadBeans();
+        });
     }
 
     stealBeans(index){

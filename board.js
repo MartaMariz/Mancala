@@ -36,6 +36,7 @@ export class Board {
     }
 
     endGame(){
+
         console.log(" check endgame");
 
         if (this.rowlist[0].checkEndGame()){
