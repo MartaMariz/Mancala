@@ -180,3 +180,18 @@ button#novojogo:hover, button#botao_login:hover, button#botao_signup:hover, butt
 #signup{
   display: none;
 }
+
+#game{
+  margin: auto;
+  text-align: center;
+}
+
+#turn{
+  border-width: 1px;
+  border-radius: 6%;
+  display: inline-block;
+  border: 1px solid #ec931f;
+  padding: 1em;
+  box-shadow: 0 0 5px #bbb;
+  width: auto;
+}

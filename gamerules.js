@@ -25,8 +25,10 @@ export class gameRules {
                     gameOver(board);
                     return 0;
                 }
+
                 if (play_again != -1 && play_again != 1 && game_state == 0){
                     disableClick(board);
+                    setTurn(2);
                     if (op == "ai")
                         waitforAI(board, ai_level);
                 }
@@ -116,7 +118,8 @@ async function waitforAI(board, ai_level){
         gameOver(board);
         return 0;
     }
-    
+
+    setTurn(1);
 }
 
 async function gameOver(board){
@@ -126,6 +129,10 @@ async function gameOver(board){
         else alert("Player" + winner + " won!");
     });
     board.clearBoard();
+}
+
+function setTurn(player){
+    document.getElementById("turn").innerHTML = 'Vez do Player'+player;
 }
 
 function sleep (time) {

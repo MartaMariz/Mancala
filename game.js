@@ -65,8 +65,8 @@ function apagarInstrucoes() {
     document.getElementById("instrucoes").style.display = "none";
 }
 
-function apagarBoard() {
-    document.getElementById("board").style.display = "none";
+function apagarGame() {
+    document.getElementById("game").style.display = "none";
 }
 
 function apagarLogIn() {
@@ -79,7 +79,7 @@ function apagarSignUp() {
 
 
 document.getElementById("botao_instrucoes").onclick = function() {
-    apagarBoard();
+    apagarGame();
     apagarLogIn();
     apagarSignUp();
     apagarConfig();
@@ -88,7 +88,7 @@ document.getElementById("botao_instrucoes").onclick = function() {
 }
 
 document.getElementById("botao_config").onclick = function() {
-    apagarBoard();
+    apagarGame();
     apagarLogIn();
     apagarSignUp();
     apagarInstrucoes();
@@ -97,7 +97,7 @@ document.getElementById("botao_config").onclick = function() {
 }
 
 document.getElementById("botao_login").onclick = function() {
-    apagarBoard();
+    apagarGame();
     apagarInstrucoes();
     apagarSignUp();
     apagarConfig();
@@ -106,7 +106,7 @@ document.getElementById("botao_login").onclick = function() {
 }
 
 document.getElementById("botao_signup").onclick = function() {
-    apagarBoard();
+    apagarGame();
     apagarInstrucoes();
     apagarLogIn();
     apagarConfig();
@@ -120,7 +120,7 @@ document.getElementById("novo_jogo").onclick = function() {
     apagarSignUp();
     apagarInstrucoes();
     game.newGame();
-    document.getElementById("board").style.display = "flex";
+    document.getElementById("game").style.display = "block";
 }
 
 document.getElementById("continuar_jogo").onclick = function() {
@@ -128,7 +128,7 @@ document.getElementById("continuar_jogo").onclick = function() {
     apagarLogIn();
     apagarSignUp();
     apagarInstrucoes();
-    document.getElementById("board").style.display = "flex";
+    document.getElementById("game").style.display = "block";
 }
 
 document.getElementById("send_holes").onclick = function() {
@@ -149,10 +149,12 @@ document.getElementById("send_default").onclick = function() {
 
 document.getElementById("input_player1").onclick = function() {
     game.setStarts(1);
+    document.getElementById("turn").innerHTML = 'Vez do Player1';
 }
 
 document.getElementById("input_player2").onclick = function() {
     game.setStarts(2);
+    document.getElementById("turn").innerHTML = 'Vez do Player2';
 }
 
 document.getElementById("input_pc").onclick = function() {
