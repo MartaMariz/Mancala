@@ -225,3 +225,37 @@ button#novojogo:hover, button#botao_login:hover, button#botao_signup:hover, butt
   background: #04AA6D;
   cursor: pointer;
 }
+
+#leaderboard{
+  border-collapse: collapse;
+  margin: 25px 0;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  font-size: 0.9em;
+  min-width: 400px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+#leaderboard thead tr {
+  background-color:#ec931f;
+  color: #ffffff;
+  text-align: left;
+}
+
+#leaderboard th,
+#leaderboard td {
+    padding: 12px 15px;
+}
+
+#leaderboard tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+#leaderboard tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+#leaderboard tbody tr:last-of-type {
+  border-bottom: 2px solid #ec931f;
+}

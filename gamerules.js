@@ -1,4 +1,5 @@
 
+
 export class gameRules {
     constructor(board, ai_level, starts, op, game){
         this.board = board;
@@ -10,7 +11,7 @@ export class gameRules {
         let game_state;
         if (starts == 2 && op == "ai") {
             disableClick(board);
-            waitforAI(board, ai_level);
+            waitforAI(board, game, ai_level);
         }
         for (let i = this.board.num_holes; i < holes.length; i++){
             holes[i].addEventListener("click", async function(){
@@ -22,7 +23,7 @@ export class gameRules {
                 if (game_state == 1) {
                     disableClick(board);
                     console.log("GAME OVER PUTAS");
-                    gameOver(board);
+                    gameOver(board, game, ai_level);
                     return 0;
                 }
 
@@ -30,19 +31,11 @@ export class gameRules {
                     disableClick(board);
                     setTurn(2);
                     if (op == "ai")
-                        waitforAI(board, ai_level);
+                        waitforAI(board, game, ai_level);
                 }
                 
             });
         }
-    }
-
-    showFinalResults(){
-        apagarBoard();
-        apagarLogIn();
-        apagarSignUp();
-        apagarConfig();
-        document.getElementById("instrucoes").style.display = "block";
     }
 
 }
@@ -96,9 +89,7 @@ function smartAI(board, ai_level){
 }
 
 
-
-
-async function waitforAI(board, ai_level){
+async function waitforAI(board, game, ai_level){
     let play_again;
     let game_state;
     do {
@@ -114,18 +105,23 @@ async function waitforAI(board, ai_level){
 
     if (game_state == 1) {
         console.log("GAME OVER PUTAS");
-        gameOver(board);
+        gameOver(board, game, ai_level);
         return 0;
     }
 
     setTurn(1);
 }
 
-async function gameOver(board){
+async function gameOver(board, game, ai_level){
+
     await sleep(4000).then(() => {
-        let winner = board.countPoints()
+        let winner = board.getWinner();
         if (winner == 3) alert("It was a tie!");
-        else alert("Player" + winner + " won!");
+        else {
+            let points = board.countPoints();
+            if (winner == 1) game.addPoints(points, ai_level);
+            alert("Player" + winner + " won!");
+        }
     });
     board.clearBoard();
 }
@@ -137,4 +133,3 @@ function setTurn(player){
 function sleep (time) {
     return new Promise((resolve) => setTimeout(resolve, time));
 }
-  

@@ -14,9 +14,10 @@
     <div id="header">
     <h1>Mancala</h1>
     <div id="loginbuttons">
-        <button type= button id="botao_login">Log in </button></li>
+        <button type= button id="botao_login">Log in </button>
         <br>
-        <button type= button id="botao_signup">Sign up</button></li>
+        <button type= button id="botao_signup">Sign up</button>
+        <div id="user">Visitante</div>
     </div>
     </div>
     <div class="menu">
@@ -84,23 +85,38 @@
 
         </div>
 
-        <div><a id="classificacoes">
+        <div>
+            <a id="classificacoes">
+                <table id="leaderboard">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Points</th>
+                            <th>AI level</th>
+                        </tr>
+                    </thead>
+                    <tbody id="boardbody">
+
+                    </tbody>
+                </table>
+            </a>
             
         </div>
         <div><a id="login">
             <h2>Log-in</h2>
-            <div>Email: <input type="text"></div>
-            <div>Palavra Passe: <input type="text"></div>
+            <div>Username: <input type="text" id="input_login_user"></div>
+            <div>Palavra Passe: <input type="text"  id="input_login_pass"></div>
+            <button type=button class="enviar" id="send_login">Enviar</button>
 
         </a>
         </div>
         <div><a id="signup">
             <h2>Sign-up</h2>
-            <div>Email: <input type="text"></div>
-            <div>Palavra Passe: <input type="text"></div>
-            <div>Confirme a Palavra Passe: <input type="text"></div>
+            <div>Username: <input type="text" id="input_signup_user"></div>
+            <div>Palavra Passe: <input type="text" id="input_signup_pass"></div>
+            <div>Confirme a Palavra Passe: <input type="text" id="confirm_pass"></div>
 
-
+            <button type=button class="enviar" id="send_signup">Enviar</button>
         </a>
         </div>
 </body>

@@ -180,6 +180,10 @@ export class Board {
     }
 
     countPoints(){
+        return Math.max(this.scorecavity1.getNumBeans(),this.scorecavity2.getNumBeans());
+    }
+
+    getWinner(){
         if (this.scorecavity1.getNumBeans() > this.scorecavity2.getNumBeans())
             return 1;
         else if (this.scorecavity1.getNumBeans() < this.scorecavity2.getNumBeans())
