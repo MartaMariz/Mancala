@@ -30,7 +30,6 @@ export class Hole {
         const beancount = document.getElementById("countbean"+(this.row_index).toString()+this.hole_index.toString());
         beancount.innerHTML = this.num_beans;
 
-
         console.log("adding bean to "+ this.html_id);
     }
     getNumBeans(){

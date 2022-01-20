@@ -13,10 +13,17 @@ export class gameRules {
             disableClick(board);
             waitforAI(board, game, ai_level);
         }
+        
         for (let i = this.board.num_holes; i < holes.length; i++){
             holes[i].addEventListener("click", async function(){
 
                 play_again = board.play(i);
+
+                if ( op == "player"){
+                        
+                    notifyMove(game, i - board.num_holes);
+
+                }
 
                 game_state = board.endGame();
 
@@ -31,7 +38,7 @@ export class gameRules {
                     disableClick(board);
                     setTurn(2);
                     if (op == "ai")
-                        waitforAI(board, game, ai_level);
+                        waitforAI(board, game, ai_level);//devia ser algo tipo espera a próxima jogada e se fosse player vs player fazia pedido ao servidor e atualizava o board e tal
                 }
                 
             });
@@ -88,6 +95,35 @@ function smartAI(board, ai_level){
     return best_move;
 }
 
+function notifyMove( game, index){
+    console.log("notifiquei a jogada oi dá update pls beijo");
+    console.log( game.user );
+    console.log( "index" + index );
+    console.log( game.game_id );
+
+
+    let options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 
+                'application/json;'
+        },
+        body: JSON.stringify({nick: game.user, password: "123", game: game.game_id, move: index })
+    }
+    fetch('http://twserver.alunos.dcc.fc.up.pt:8008/notify', options)
+    .then((response) => {
+        if (response.ok) {
+            console.log(response.json());
+            console.log("move was made");
+          return response;
+        } else {
+          throw new Error('Invalid move');
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+    });
+}
 
 async function waitforAI(board, game, ai_level){
     let play_again;

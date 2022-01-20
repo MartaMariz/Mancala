@@ -5,6 +5,8 @@ let game;
 
 class Game{
     constructor(num_holes, num_beans, ai_level){
+        console.log("oi");
+        this.game_id = 0;
         this.num_beans = num_beans;
         this.num_holes = num_holes;
         this.ai_level = ai_level;
@@ -65,11 +67,62 @@ class Game{
         updateLeaderboard(points, this.user, ai_level);
     }
 
+    joinGame(){
+        let options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 
+                    'application/json;charset=utf-8'
+            },
+            body: JSON.stringify({nick: this.user, password: "123", size: this.num_holes, initial: this.num_beans })
+        }
+        let fetchRes = fetch('http://twserver.alunos.dcc.fc.up.pt:8008/join', options);
+        fetchRes.then(res =>
+            res.json()).then(d => {
+                console.log(d.game);
+                this.game_id = d.game;
+                this.setUpdate( d.game);
+                return d.game;
+            })
+
+
+    }
+    setUpdate( game ){
+        const urlUpdate =new URL("http://twserver.alunos.dcc.fc.up.pt:8008/update");
+
+        urlUpdate.searchParams.append('game', game);
+        urlUpdate.searchParams.append('nick', this.user);
+
+        console.log("fiz cenas nos params e tal");
+        console.log(urlUpdate.href);
+        
+        const updater = new EventSource(urlUpdate.href);
+        updater.onmessage = e => console.log(e.data);
+    }
+    leave(){
+        let options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 
+                    'application/json;charset=utf-8'
+            },
+            body: JSON.stringify({nick: this.user, password: "123", game: this.game_id })
+        }
+        let fetchRes = fetch('http://twserver.alunos.dcc.fc.up.pt:8008/leave', options);
+        fetchRes.then(res =>
+            res.json()).then(d => {
+                console.log("leave game");
+                console.log(d);
+            })
+    }
+
 }
 
 
 window.onload = function(){
     document.getElementById("continuar_jogo").style.display = "none";
+    document.getElementById("acaba_jogo").style.display = "none";
+
     loadLeaderboard();
     let num_holes = 6;
     let num_beans = 4;
@@ -101,12 +154,42 @@ function eraseClassificacoes() {
     document.getElementById("classificacoes").style.display = "none";
 }
 
+function eraseNovoJogo() {
+    document.getElementById("novo_jogo").style.display = "none";
+}
+
+
 function logIn(username){
     document.getElementById("user").innerHTML = username;
     document.getElementById("user").style.display = "block";
     game.setUser(username);
 }
 
+
+function logInServer(user, pass){
+    console.log(user + "  " + pass);
+    console.log("doing log in server");
+    let options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 
+                'application/json;'
+        },
+        body: JSON.stringify({nick: user, password: pass })
+    }
+    fetch('http://twserver.alunos.dcc.fc.up.pt:8008/register', options)
+    .then((response) => {
+        if (response.ok) {
+            console.log(response.json());
+          return response;
+        } else {
+          throw new Error('Wrong password');
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+    });
+}
 
 document.getElementById("botao_instrucoes").onclick = function() {
     eraseGame();
@@ -164,8 +247,27 @@ document.getElementById("novo_jogo").onclick = function() {
     eraseSignUp();
     eraseClassificacoes();
     eraseInstrucoes();
+    eraseNovoJogo();
     game.newGame();
     document.getElementById("game").style.display = "block";
+    document.getElementById("acaba_jogo").style.display = "block";
+}
+
+document.getElementById("acaba_jogo").onclick = function() {
+    eraseConfig();
+    eraseLogIn();
+    eraseSignUp();
+    eraseClassificacoes();
+    eraseInstrucoes();
+    eraseNovoJogo();
+    if (game.game_id != 0){
+        console.log("o game id era diferente de 0");
+        game.leave();
+    }
+    document.getElementById("game").style.display = "none";
+    document.getElementById("acaba_jogo").style.display = "none";
+    document.getElementById("novo_jogo").style.display = "block";
+
 }
 
 document.getElementById("continuar_jogo").onclick = function() {
@@ -208,28 +310,48 @@ document.getElementById("input_pc").onclick = function() {
 }
 
 document.getElementById("input_player").onclick = function() {
-    game.setDifficulty(0);
+    game.setDifficulty(0);       
+    game.joinGame();
+    console.log("set update");
     game.setOpponent("player");
+
+    console.log(" Nice entraste friend agora espera idk " + game.game_id);
+
 }
 
 document.getElementById("send_login").onclick = function() {
+
+ 
     const user = JSON.parse(localStorage.getItem(document.getElementById("input_login_user").value));
+
+    const r = logInServer(document.getElementById("input_login_user").value, document.getElementById("input_login_pass").value);
+    console.log(r);
+
     if (user == null) {
         alert("User not found!");
         return;
     }
-    if (user.password == document.getElementById("input_login_pass").value)
+    if (user.password == document.getElementById("input_login_pass").value){
         logIn(document.getElementById("input_login_user").value);
+    }
+
 }
 
 document.getElementById("send_signup").onclick = function() {
-    const user = JSON.parse(localStorage.getItem(document.getElementById("input_signup_user").value));
+    const nick = document.getElementById("input_signup_user").value;
+    const pass = document.getElementById("input_signup_pass").value
+
+    const r = logInServer(nick, pass);
+    console.log(r);
+
+    const user = JSON.parse(localStorage.getItem(nick));
     if (user != null) {
         alert("User already exists!");
         return;
     }
 
-    if (document.getElementById("input_signup_pass").value == document.getElementById("confirm_pass").value){
+
+    if (pass == document.getElementById("confirm_pass").value){
         localStorage.setItem(document.getElementById("input_signup_user").value,
         JSON.stringify({
             password: document.getElementById("input_signup_pass").value,
@@ -237,6 +359,11 @@ document.getElementById("send_signup").onclick = function() {
         }))
         logIn(document.getElementById("input_signup_user").value);
     }
+
+
+   
+    
+    
 }
 
 function allStorage() {
@@ -283,3 +410,4 @@ function updateLeaderboard(points, user, ai_level){
     new_points.innerHTML = points + ' points - user ' + user + ' - ai_level '+ ai_level;
     classif.appendChild(new_points);
 }
+
