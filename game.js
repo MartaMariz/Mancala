@@ -97,7 +97,50 @@ class Game{
         console.log(urlUpdate.href);
         
         const updater = new EventSource(urlUpdate.href);
-        updater.onmessage = e => console.log(e.data);
+
+        updater.onmessage = res => {
+            console.log(res.data);
+
+            const message = JSON.parse(res.data);
+            console.log(message);
+            if('board' in message){
+                console.log(message.board);
+
+                console.log("oi");
+                for(var b in message.board){
+                    console.log(b);
+                    console.log(message.board[b]);
+                    if ( b == 'turn'){
+                        if ( message.board[b] == game.user){
+                            console.log("its my turn ");
+                        }
+                        else{
+                            console("turn do amiguinho");
+                        }
+                    }
+                    if ( 'turn' in message.board){
+                        console.log(message.board.turn);
+                        console.log(message.board['turn']);
+                        console.log(message.board[turn]);
+
+                    }
+
+                }
+                
+            }
+
+            if ('pits' in message){
+                for(let b in message.pits){
+                    console.log(message.pits[b]);
+                    console.log("oi");
+                }
+            }
+               
+
+
+
+        }
+
     }
     leave(){
         let options = {
