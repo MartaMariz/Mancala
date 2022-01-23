@@ -161,23 +161,7 @@ button#novojogo:hover, button#botao_login:hover, button#botao_signup:hover, butt
 }
 
 
-#instrucoes{
-  display: none;
-}
-
-#config{
-  display: none;
-}
-
-#classificacoes{
-  display: none;
-}
-
-#login{
-  display: none;
-}
-
-#signup{
+#instrucoes, #config, #classificacoes_locais, #classificacoes_server, #signup, #login{
   display: none;
 }
 

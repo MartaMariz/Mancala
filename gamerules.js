@@ -28,7 +28,7 @@ export class gameRules {
 
                 if (game_state == 1) {
                     disableClick(board);
-                    gameOver(board, game, ai_level);
+                    gameOver(game.user, board, game, ai_level);
                     return 0;
                 }
 
@@ -61,7 +61,7 @@ async function waitforAI(board, game, ai_level){
     } while ( play_again == 2 && game_state == 0);
 
     if (game_state == 1) {
-        gameOver(board, game, ai_level);
+        gameOver(game.user, board, game, ai_level);
         return 0;
     }
 

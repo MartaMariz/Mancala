@@ -1,4 +1,4 @@
-import {sleep} from './utils.js';
+import {sleep, enableClick, disableClick, setTurn} from './utils.js';
 
 
 function notifyMove(game, index){
@@ -72,10 +72,67 @@ function joinGame(thisgame){
         res.json()).then(d => {
             console.log(d.game);
             thisgame.game_id = d.game;
-            thisgame.setUpdate(d.game);
+            setUpdate(d.game, thisgame);
             return d.game;
-        })
+        })   
+}
 
+function setUpdate(game, gameobj){
+    const urlUpdate =new URL("http://twserver.alunos.dcc.fc.up.pt:8008/update");
+
+    urlUpdate.searchParams.append('game', game);
+    urlUpdate.searchParams.append('nick', gameobj.user);
+
+    console.log("fiz cenas nos params e tal");
+    console.log(urlUpdate.href);
+    
+    const updater = new EventSource(urlUpdate.href);
+
+    updater.onmessage = res => {
+        console.log(res.data);
+
+        const message = JSON.parse(res.data);
+        console.log(message);
+
+        if ('winner' in message){
+            serverGameOver(message.winner, gameobj.user, gameobj.board);
+        }
+        
+        if('board' in message){
+            if ('turn' in message.board){
+                let turn = message.board.turn;
+                if (turn != gameobj.user){
+                    disableClick(gameobj.board);
+                    setTurn(2);
+                }
+                else {
+                    enableClick(gameobj.board);
+                    setTurn(1);
+                }
+            }
+            if ('pit' in message){
+                let pit = message.pit;
+                let turn = message.board.turn;
+                let adv_points;
+                let adv_side; let adv_pits;
+                for (let store in message.stores)
+                    if (store != gameobj.user) adv_points = message.stores[store];
+
+                for (let side in message.board.sides){
+                    if (side != gameobj.user) {
+                        adv_side = message.board.sides[side];
+                        console.log(adv_side.pits);
+                        adv_pits = adv_side.pits;
+                        adv_pits = adv_pits.reverse();
+                    }
+                }
+                gameobj.updateGame(pit, turn, adv_points, adv_pits);
+            }
+            if ('stores' in message){
+
+            }
+        }
+    }
 }
 
 function leave(game){
@@ -95,12 +152,26 @@ function leave(game){
         })
 }
 
-async function serverGameOver(game, winner, player, board){
+function ranking(){
+    let options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 
+                'application/json;charset=utf-8'
+        },
+        body: JSON.stringify({})
+    }
+    let fetchRes = fetch('http://twserver.alunos.dcc.fc.up.pt:8008/ranking', options);
+    fetchRes.then(res =>
+        res.json()).then(d => {
+            loadRanking(d.ranking);
+        })
+}
+
+async function serverGameOver(winner, player, board){
 
     await sleep(4000).then(() => {
         if (winner == player) {
-            let points = board.countPoints();
-            game.addPoints(winner, points, 0);
             alert("Player 1 won!");
         }
         else alert("Player 2 won!");
@@ -109,4 +180,33 @@ async function serverGameOver(game, winner, player, board){
     board.clearBoard();
 }
 
-export { notifyMove, logInServer, joinGame, leave, serverGameOver };
+function loadRanking(ranking){
+    console.log(ranking);
+
+    const classif = document.getElementById("boardbody_server");
+
+    for (let i in ranking){
+        let user_info = ranking[i];
+        let nick = user_info.nick;
+        let victories = user_info.victories;
+        let games = user_info.games;
+
+        let new_points = document.createElement("tr");
+        new_points.setAttribute("class", "points");
+
+        let username = document.createElement("td");
+        username.innerHTML = nick;
+        let points = document.createElement("td");
+        points.innerHTML = victories;
+        let total = document.createElement("td");
+        total.innerHTML = games;
+        new_points.appendChild(username);
+        new_points.appendChild(points);
+        new_points.appendChild(total);
+
+        classif.appendChild(new_points);
+    }
+    
+}
+
+export { notifyMove, logInServer, joinGame, leave, serverGameOver, ranking };

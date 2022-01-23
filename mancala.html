@@ -24,7 +24,8 @@
         <ul>
             <li><button id="botao_instrucoes">Instruções</button></li>
             <li><button id="botao_config">Configurações</button></li>
-            <li><button id="botao_classificacoes">Classificações</button></li>
+            <li><button id="botao_classificacoes_locais">Classificações Locais</button></li>
+            <li><button id="botao_classificacoes_server">Classificações Gerais</button></li>
         </ul>
         <hr>
     </div>
@@ -87,23 +88,37 @@
         </div>
 
         <div>
-            <a id="classificacoes">
+            <a id="classificacoes_locais">
                 <table id="leaderboard">
                     <thead>
                         <tr>
                             <th>Nome</th>
                             <th>Pontos</th>
-                            <th>Adversário</th>
+                            <th>Nível do AI</th>
                         </tr>
                     </thead>
-                    <tbody id="boardbody">
-
+                    <tbody id="boardbody_local">
                     </tbody>
                 </table>
             </a>
         </div>
 
-        
+        <div>
+            <a id="classificacoes_server">
+                <table id="leaderboard">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Vitórias</th>
+                            <th>Jogos</th>
+                        </tr>
+                    </thead>
+                    <tbody id="boardbody_server">
+
+                    </tbody>
+                </table>
+            </a>
+        </div>
 
         <div><a id="login">
             <h2>Log-in</h2>

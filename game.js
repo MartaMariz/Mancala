@@ -1,7 +1,7 @@
 import {Board} from './board.js';
 import { gameRules } from './gamerules.js';
 import {enableClick, setTurn, disableClick, gameOver} from './utils.js';
-import {logInServer, joinGame, leave, serverGameOver} from './server.js';
+import {logInServer, joinGame, leave, serverGameOver, ranking} from './server.js';
 
 
 let game;
@@ -58,76 +58,20 @@ class Game{
         this.pass = password;
     }
 
-    addPoints(user, points, ai_level){
+    addPoints(user, points, total, ai_level){
         if (this.user == "Visitante") return;
         const user_info = JSON.parse(localStorage.getItem(user));
 
+        let relacao_points = points + "/" +total;
+
         if (!user_info.hasOwnProperty('history'))
-            user_info['history'] = [{points: points, ai_level: ai_level}];
+            user_info['history'] = [{points: relacao_points, ai_level: ai_level}];
         else 
-            user_info['history'].push({points: points, ai_level: ai_level});
+            user_info['history'].push({points: relacao_points, ai_level: ai_level});
 
         localStorage.setItem(user, JSON.stringify(user_info));
 
-        updateLeaderboard(points, user, ai_level);
-    }
-
-    setUpdate( game ){
-        const urlUpdate =new URL("http://twserver.alunos.dcc.fc.up.pt:8008/update");
-
-        urlUpdate.searchParams.append('game', game);
-        urlUpdate.searchParams.append('nick', this.user);
-
-        console.log("fiz cenas nos params e tal");
-        console.log(urlUpdate.href);
-        
-        const updater = new EventSource(urlUpdate.href);
-
-        updater.onmessage = res => {
-            console.log(res.data);
-
-            const message = JSON.parse(res.data);
-            console.log(message);
-
-            if ('winner' in message){
-                serverGameOver(this, message.winner, this.user, this.board);
-            }
-            
-            if('board' in message){
-                if ('turn' in message.board){
-                    let turn = message.board.turn;
-                    if (turn != this.user){
-                        disableClick(this.board);
-                        setTurn(2);
-                    }
-                    else {
-                        enableClick(this.board);
-                        setTurn(1);
-                    }
-                }
-                if ('pit' in message){
-                    let pit = message.pit;
-                    let turn = message.board.turn;
-                    let adv_points;
-                    let adv_side; let adv_pits;
-                    for (let store in message.stores)
-                        if (store != this.user) adv_points = message.stores[store];
-
-                    for (let side in message.board.sides){
-                        if (side != this.user) {
-                            adv_side = message.board.sides[side];
-                            console.log(adv_side.pits);
-                            adv_pits = adv_side.pits;
-                            adv_pits = adv_pits.reverse();
-                        }
-                    }
-                    this.updateGame(pit, turn, adv_points, adv_pits);
-                }
-                if ('stores' in message){
-
-                }
-            }
-        }
+        updateLocalLeaderboard(relacao_points, user, ai_level);
     }
 
     updateGame(pit, turn, adv_points, adv_pits){
@@ -187,8 +131,12 @@ function eraseSignUp() {
     document.getElementById("signup").style.display = "none";
 }
 
-function eraseClassificacoes() {
-    document.getElementById("classificacoes").style.display = "none";
+function eraseClassificacoesLocais() {
+    document.getElementById("classificacoes_locais").style.display = "none";
+}
+
+function eraseClassificacoesServer() {
+    document.getElementById("classificacoes_server").style.display = "none";
 }
 
 function eraseNovoJogo() {
@@ -209,7 +157,8 @@ document.getElementById("botao_instrucoes").onclick = function() {
     eraseLogIn();
     eraseSignUp();
     eraseConfig();
-    eraseClassificacoes();
+    eraseClassificacoesLocais();
+    eraseClassificacoesServer();
     document.getElementById("continuar_jogo").style.display = "block";
     document.getElementById("instrucoes").style.display = "block";
 }
@@ -219,7 +168,8 @@ document.getElementById("botao_config").onclick = function() {
     eraseLogIn();
     eraseSignUp();
     eraseInstrucoes();
-    eraseClassificacoes();
+    eraseClassificacoesLocais();
+    eraseClassificacoesServer();
     document.getElementById("continuar_jogo").style.display = "block";
     document.getElementById("config").style.display = "block";
 }
@@ -229,19 +179,33 @@ document.getElementById("botao_login").onclick = function() {
     eraseInstrucoes();
     eraseSignUp();
     eraseConfig();
-    eraseClassificacoes();
+    eraseClassificacoesLocais();
+    eraseClassificacoesServer();
     document.getElementById("continuar_jogo").style.display = "block";
     document.getElementById("login").style.display = "block";
 }
 
-document.getElementById("botao_classificacoes").onclick = function() {
+document.getElementById("botao_classificacoes_locais").onclick = function() {
+    eraseGame();
+    eraseInstrucoes();
+    eraseLogIn();
+    eraseClassificacoesServer();
+    eraseSignUp();
+    eraseConfig();
+    document.getElementById("continuar_jogo").style.display = "block";
+    document.getElementById("classificacoes_locais").style.display = "block";
+}
+
+document.getElementById("botao_classificacoes_server").onclick = function() {
     eraseGame();
     eraseInstrucoes();
     eraseLogIn();
     eraseSignUp();
+    eraseClassificacoesLocais();
     eraseConfig();
     document.getElementById("continuar_jogo").style.display = "block";
-    document.getElementById("classificacoes").style.display = "block";
+    loadGlobalLeaderboard();
+    document.getElementById("classificacoes_server").style.display = "block";
 }
 
 document.getElementById("botao_signup").onclick = function() {
@@ -249,7 +213,8 @@ document.getElementById("botao_signup").onclick = function() {
     eraseInstrucoes();
     eraseLogIn();
     eraseConfig();
-    eraseClassificacoes();
+    eraseClassificacoesLocais();
+    eraseClassificacoesServer();
     document.getElementById("continuar_jogo").style.display = "block";
     document.getElementById("signup").style.display = "block";
 }
@@ -258,7 +223,8 @@ document.getElementById("novo_jogo").onclick = function() {
     eraseConfig();
     eraseLogIn();
     eraseSignUp();
-    eraseClassificacoes();
+    eraseClassificacoesLocais();
+    eraseClassificacoesServer();
     eraseInstrucoes();
     eraseNovoJogo();
     game.newGame();
@@ -270,7 +236,8 @@ document.getElementById("acaba_jogo").onclick = function() {
     eraseConfig();
     eraseLogIn();
     eraseSignUp();
-    eraseClassificacoes();
+    eraseClassificacoesLocais();
+    eraseClassificacoesServer();
     eraseInstrucoes();
     eraseNovoJogo();
     if (game.game_id != 0){
@@ -286,7 +253,8 @@ document.getElementById("acaba_jogo").onclick = function() {
 document.getElementById("continuar_jogo").onclick = function() {
     eraseConfig();
     eraseLogIn();
-    eraseClassificacoes();
+    eraseClassificacoesLocais();
+    eraseClassificacoesServer();
     eraseSignUp();
     eraseInstrucoes();
     document.getElementById("game").style.display = "block";
@@ -379,14 +347,12 @@ function allStorage() {
 }
 
 function loadLeaderboard(){
-    const classif = document.getElementById("boardbody");
+    const classif = document.getElementById("boardbody_local");
     let user_info;
     const values = allStorage();
     
     for (let i in values){
         user_info = JSON.parse(values[i]);
-        let user = localStorage.key(i);
-        console.log(i);
 
         if (user_info.hasOwnProperty('history')) {
             for (let j in user_info.history) {
@@ -400,11 +366,7 @@ function loadLeaderboard(){
                 let points = document.createElement("td");
                 points.innerHTML = play.points;
                 let opponent = document.createElement("td");
-                if (play.ai_level != 0){
-                    opponent.innerHTML = "AI level " + play.ai_level;
-                }
-                else  opponent.innerHTML = "Player Online"
-
+                opponent.innerHTML = "AI level " + play.ai_level;
                 new_points.appendChild(username);
                 new_points.appendChild(points);
                 new_points.appendChild(opponent);
@@ -415,8 +377,8 @@ function loadLeaderboard(){
     }
 }
 
-function updateLeaderboard(points, user, ai_level){
-    const classif = document.getElementById("boardbody");
+function updateLocalLeaderboard(points, user, ai_level){
+    const classif = document.getElementById("boardbody_local");
     let new_points = document.createElement("tr");
     new_points.setAttribute("class", "points");
 
@@ -425,14 +387,21 @@ function updateLeaderboard(points, user, ai_level){
     let userpoints = document.createElement("td");
     userpoints.innerHTML = points;
     let opponent = document.createElement("td");
-    if (ai_level != 0){
-        opponent.innerHTML = "AI level " + ai_level;
-    }
-    else  opponent.innerHTML = "Player Online"
+    opponent.innerHTML = "AI level " + ai_level;
+
 
     new_points.appendChild(username);
     new_points.appendChild(userpoints);
     new_points.appendChild(opponent);
 
     classif.appendChild(new_points);
+}
+
+function loadGlobalLeaderboard(){
+    const classif = document.getElementById("boardbody_server");
+    while (classif.firstChild) {
+        classif.removeChild(classif.firstChild);
+    }
+    ranking();
+
 }
