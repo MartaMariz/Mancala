@@ -123,7 +123,7 @@ function setUpdate(game, gameobj){
                         adv_side = message.board.sides[side];
                         console.log(adv_side.pits);
                         adv_pits = adv_side.pits;
-                        adv_pits = adv_pits.reverse();
+                        //adv_pits = adv_pits.reverse();
                     }
                 }
                 gameobj.updateGame(pit, turn, adv_points, adv_pits);

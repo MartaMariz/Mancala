@@ -79,6 +79,7 @@ class Game{
         console.log("turn" + turn);
         console.log("adv_points" + adv_points);
         console.log("adv_pits" + adv_pits);
+        console.log(adv_pits[pit]);
 
         if (turn == this.user && !adv_pits[pit]){
             console.log("mover pecinhas do amigo pls");
