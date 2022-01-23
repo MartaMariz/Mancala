@@ -1,4 +1,4 @@
-import {enableClick, setTurn, disableClick, sleep} from './utils.js';
+import {enableClick, setTurn, disableClick, sleep, gameOver} from './utils.js';
 import { notifyMove } from './server.js';
 
 export class gameRules {
@@ -28,7 +28,6 @@ export class gameRules {
 
                 if (game_state == 1) {
                     disableClick(board);
-                    console.log("GAME OVER PUTAS");
                     gameOver(board, game, ai_level);
                     return 0;
                 }
@@ -62,7 +61,6 @@ async function waitforAI(board, game, ai_level){
     } while ( play_again == 2 && game_state == 0);
 
     if (game_state == 1) {
-        console.log("GAME OVER PUTAS");
         gameOver(board, game, ai_level);
         return 0;
     }
@@ -70,40 +68,22 @@ async function waitforAI(board, game, ai_level){
     setTurn(1);
 }
 
-async function gameOver(board, game, ai_level){
-
-    await sleep(4000).then(() => {
-        let winner = board.getWinner();
-        if (winner == 3) alert("It was a tie!");
-        else {
-            let points = board.countPoints();
-            if (winner == 1) game.addPoints(points, ai_level);
-            alert("Player" + winner + " won!");
-        }
-    });
-    board.clearBoard();
-}
-
 function aiMove(ai_level, board){
     if (ai_level == 1){
         let index = Math.floor(Math.random()*board.num_holes);
-        console.log("oi sou o ai joguei index " + index);
         return board.play(index); 
     }
     else {
         let index = smartAI(board, ai_level);
-        console.log("o melhor index é " + index);
         return board.play(index);
     }
 }
 
 function smartAI(board, ai_level){
-    console.log("AI PLAYNG");
     let points = 0;
     let curr_points;
     let best_move;
     for(let i = 0 ; i< board.num_holes; i++){
-        console.log("CHECAR PINTS");
 
         curr_points = board.simulatePlay(i, ai_level);
         if (curr_points >= points){
@@ -112,7 +92,6 @@ function smartAI(board, ai_level){
         }
     }
     if (points == 0){
-        console.log("olha fodasse");
         best_move = Math.floor(Math.random()*board.num_holes);
     }
     return best_move;

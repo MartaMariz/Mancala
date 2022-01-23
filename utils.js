@@ -20,4 +20,19 @@ function sleep (time) {
     return new Promise((resolve) => setTimeout(resolve, time));
 }
 
-export { sleep, setTurn, enableClick, disableClick };
+
+async function gameOver(board, game, ai_level){
+
+    await sleep(4000).then(() => {
+        let winner = board.getWinner();
+        if (winner == 3) alert("It was a tie!");
+        else {
+            let points = board.countPoints();
+            if (winner == 1) game.addPoints(points, ai_level);
+            alert("Player" + winner + " won!");
+        }
+    });
+    board.clearBoard();
+}
+
+export { sleep, setTurn, enableClick, disableClick, gameOver };

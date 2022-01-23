@@ -1,3 +1,5 @@
+import {sleep} from './utils.js';
+
 
 function notifyMove(game, index){
     console.log("notifiquei a jogada oi dá update pls beijo");
@@ -93,4 +95,18 @@ function leave(game){
         })
 }
 
-export { notifyMove, logInServer, joinGame, leave };
+async function serverGameOver(game, winner, player, board){
+
+    await sleep(4000).then(() => {
+        if (winner == player) {
+            let points = board.countPoints();
+            game.addPoints(winner, points, 0);
+            alert("Player 1 won!");
+        }
+        else alert("Player 2 won!");
+
+    });
+    board.clearBoard();
+}
+
+export { notifyMove, logInServer, joinGame, leave, serverGameOver };

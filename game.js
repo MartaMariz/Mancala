@@ -1,7 +1,7 @@
 import {Board} from './board.js';
 import { gameRules } from './gamerules.js';
-import {enableClick, setTurn, disableClick} from './utils.js';
-import {logInServer, joinGame, leave} from './server.js';
+import {enableClick, setTurn, disableClick, gameOver} from './utils.js';
+import {logInServer, joinGame, leave, serverGameOver} from './server.js';
 
 
 let game;
@@ -58,18 +58,18 @@ class Game{
         this.pass = password;
     }
 
-    addPoints(points, ai_level){
+    addPoints(user, points, ai_level){
         if (this.user == "Visitante") return;
-        const user_info = JSON.parse(localStorage.getItem(this.user));
+        const user_info = JSON.parse(localStorage.getItem(user));
 
         if (!user_info.hasOwnProperty('history'))
             user_info['history'] = [{points: points, ai_level: ai_level}];
         else 
             user_info['history'].push({points: points, ai_level: ai_level});
 
-        localStorage.setItem(this.user, JSON.stringify(user_info));
+        localStorage.setItem(user, JSON.stringify(user_info));
 
-        updateLeaderboard(points, this.user, ai_level);
+        updateLeaderboard(points, user, ai_level);
     }
 
     setUpdate( game ){
@@ -88,6 +88,10 @@ class Game{
 
             const message = JSON.parse(res.data);
             console.log(message);
+
+            if ('winner' in message){
+                serverGameOver(this, message.winner, this.user, this.board);
+            }
             
             if('board' in message){
                 if ('turn' in message.board){
@@ -105,10 +109,19 @@ class Game{
                     let pit = message.pit;
                     let turn = message.board.turn;
                     let adv_points;
+                    let adv_side; let adv_pits;
                     for (let store in message.stores)
                         if (store != this.user) adv_points = message.stores[store];
 
-                    this.updateGame(pit, turn, adv_points);
+                    for (let side in message.board.sides){
+                        if (side != this.user) {
+                            adv_side = message.board.sides[side];
+                            console.log(adv_side.pits);
+                            adv_pits = adv_side.pits;
+                            adv_pits = adv_pits.reverse();
+                        }
+                    }
+                    this.updateGame(pit, turn, adv_points, adv_pits);
                 }
                 if ('stores' in message){
 
@@ -117,17 +130,26 @@ class Game{
         }
     }
 
-    updateGame(pit, turn, adv_points){
+    updateGame(pit, turn, adv_points, adv_pits){
         console.log("pit" + pit);
         console.log("turn" + turn);
         console.log("adv_points" + adv_points);
-        console.log(this.board.scorecavity2.getNumBeans());
+        console.log("adv_pits" + adv_pits);
 
-        if (turn == this.user && this.board.rowlist[1].getNumBeans(pit)){
+        if (turn == this.user && !adv_pits[pit]){
             console.log("mover pecinhas do amigo pls");
             this.board.play(this.num_holes-pit-1);
         }
         else if (adv_points > this.board.scorecavity2.getNumBeans()) this.board.play(this.num_holes-pit-1);
+
+        let game_state = this.board.endGame();
+
+        if (game_state == 1) {
+            disableClick(this.board);
+            console.log("GAME OVER PUTAS");
+            gameOver(this.board, this, ai_level);
+            return 0;
+        }
             
     }
 
@@ -364,6 +386,7 @@ function loadLeaderboard(){
     for (let i in values){
         user_info = JSON.parse(values[i]);
         let user = localStorage.key(i);
+        console.log(i);
 
         if (user_info.hasOwnProperty('history')) {
             for (let j in user_info.history) {
@@ -373,15 +396,18 @@ function loadLeaderboard(){
                 new_points.setAttribute("class", "points");
 
                 let username = document.createElement("td");
-                username.innerHTML = user;
+                username.innerHTML = i;
                 let points = document.createElement("td");
                 points.innerHTML = play.points;
-                let ai_level = document.createElement("td");
-                ai_level.innerHTML = play.ai_level;
+                let opponent = document.createElement("td");
+                if (play.ai_level != 0){
+                    opponent.innerHTML = "AI level " + play.ai_level;
+                }
+                else  opponent.innerHTML = "Player Online"
 
                 new_points.appendChild(username);
                 new_points.appendChild(points);
-                new_points.appendChild(ai_level);
+                new_points.appendChild(opponent);
 
                 classif.appendChild(new_points);
             }
@@ -391,8 +417,22 @@ function loadLeaderboard(){
 
 function updateLeaderboard(points, user, ai_level){
     const classif = document.getElementById("boardbody");
-    let new_points = document.createElement("li");
+    let new_points = document.createElement("tr");
     new_points.setAttribute("class", "points");
-    new_points.innerHTML = points + ' points - user ' + user + ' - ai_level '+ ai_level;
+
+    let username = document.createElement("td");
+    username.innerHTML = user;
+    let userpoints = document.createElement("td");
+    userpoints.innerHTML = points;
+    let opponent = document.createElement("td");
+    if (ai_level != 0){
+        opponent.innerHTML = "AI level " + ai_level;
+    }
+    else  opponent.innerHTML = "Player Online"
+
+    new_points.appendChild(username);
+    new_points.appendChild(userpoints);
+    new_points.appendChild(opponent);
+
     classif.appendChild(new_points);
 }
