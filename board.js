@@ -1,5 +1,8 @@
 import {Row} from './row.js';
 import { ScoreCavity } from './scorecavity.js';
+import {sleep} from './utils.js';
+
+
 
 export class Board {
     constructor(num_holes, num_beans, html_id, game){
@@ -195,10 +198,6 @@ export class Board {
         this.game.newGame();
     }
 
-}
-
-function sleep (time) {
-    return new Promise((resolve) => setTimeout(resolve, time));
 }
 
 export default {Board}

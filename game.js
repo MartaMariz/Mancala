@@ -1,5 +1,8 @@
 import {Board} from './board.js';
 import { gameRules } from './gamerules.js';
+import {enableClick, setTurn, disableClick} from './utils.js';
+import {logInServer, joinGame, leave} from './server.js';
+
 
 let game;
 
@@ -13,6 +16,7 @@ class Game{
         this.starts = 1;
         this.opponent = "ai";
         this.user = "Visitante";
+        this.pass = "";
         this.newGame();
     }
 
@@ -49,8 +53,9 @@ class Game{
         this.opponent = op;
     }
 
-    setUser(username){
+    setUser(username, password){
         this.user = username;
+        this.pass = password;
     }
 
     addPoints(points, ai_level){
@@ -67,26 +72,6 @@ class Game{
         updateLeaderboard(points, this.user, ai_level);
     }
 
-    joinGame(){
-        let options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 
-                    'application/json;charset=utf-8'
-            },
-            body: JSON.stringify({nick: this.user, password: "123", size: this.num_holes, initial: this.num_beans })
-        }
-        let fetchRes = fetch('http://twserver.alunos.dcc.fc.up.pt:8008/join', options);
-        fetchRes.then(res =>
-            res.json()).then(d => {
-                console.log(d.game);
-                this.game_id = d.game;
-                this.setUpdate( d.game);
-                return d.game;
-            })
-
-
-    }
     setUpdate( game ){
         const urlUpdate =new URL("http://twserver.alunos.dcc.fc.up.pt:8008/update");
 
@@ -103,60 +88,47 @@ class Game{
 
             const message = JSON.parse(res.data);
             console.log(message);
+            
             if('board' in message){
-                console.log(message.board);
-
-                console.log("oi");
-                for(var b in message.board){
-                    console.log(b);
-                    console.log(message.board[b]);
-                    if ( b == 'turn'){
-                        if ( message.board[b] == game.user){
-                            console.log("its my turn ");
-                        }
-                        else{
-                            console("turn do amiguinho");
-                        }
+                if ('turn' in message.board){
+                    let turn = message.board.turn;
+                    if (turn != this.user){
+                        disableClick(this.board);
+                        setTurn(2);
                     }
-                    if ( 'turn' in message.board){
-                        console.log(message.board.turn);
-                        console.log(message.board['turn']);
-                        console.log(message.board[turn]);
-
+                    else {
+                        enableClick(this.board);
+                        setTurn(1);
                     }
+                }
+                if ('pit' in message){
+                    let pit = message.pit;
+                    let turn = message.board.turn;
+                    let adv_points;
+                    for (let store in message.stores)
+                        if (store != this.user) adv_points = message.stores[store];
+
+                    this.updateGame(pit, turn, adv_points);
+                }
+                if ('stores' in message){
 
                 }
-                
             }
-
-            if ('pits' in message){
-                for(let b in message.pits){
-                    console.log(message.pits[b]);
-                    console.log("oi");
-                }
-            }
-               
-
-
-
         }
-
     }
-    leave(){
-        let options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 
-                    'application/json;charset=utf-8'
-            },
-            body: JSON.stringify({nick: this.user, password: "123", game: this.game_id })
+
+    updateGame(pit, turn, adv_points){
+        console.log("pit" + pit);
+        console.log("turn" + turn);
+        console.log("adv_points" + adv_points);
+        console.log(this.board.scorecavity2.getNumBeans());
+
+        if (turn == this.user && this.board.rowlist[1].getNumBeans(pit)){
+            console.log("mover pecinhas do amigo pls");
+            this.board.play(this.num_holes-pit-1);
         }
-        let fetchRes = fetch('http://twserver.alunos.dcc.fc.up.pt:8008/leave', options);
-        fetchRes.then(res =>
-            res.json()).then(d => {
-                console.log("leave game");
-                console.log(d);
-            })
+        else if (adv_points > this.board.scorecavity2.getNumBeans()) this.board.play(this.num_holes-pit-1);
+            
     }
 
 }
@@ -202,37 +174,13 @@ function eraseNovoJogo() {
 }
 
 
-function logIn(username){
+function logIn(username, password){
     document.getElementById("user").innerHTML = username;
     document.getElementById("user").style.display = "block";
-    game.setUser(username);
+    game.setUser(username, password);
 }
 
 
-function logInServer(user, pass){
-    console.log(user + "  " + pass);
-    console.log("doing log in server");
-    let options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 
-                'application/json;'
-        },
-        body: JSON.stringify({nick: user, password: pass })
-    }
-    fetch('http://twserver.alunos.dcc.fc.up.pt:8008/register', options)
-    .then((response) => {
-        if (response.ok) {
-            console.log(response.json());
-          return response;
-        } else {
-          throw new Error('Wrong password');
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-    });
-}
 
 document.getElementById("botao_instrucoes").onclick = function() {
     eraseGame();
@@ -305,7 +253,7 @@ document.getElementById("acaba_jogo").onclick = function() {
     eraseNovoJogo();
     if (game.game_id != 0){
         console.log("o game id era diferente de 0");
-        game.leave();
+        leave(game);
     }
     document.getElementById("game").style.display = "none";
     document.getElementById("acaba_jogo").style.display = "none";
@@ -354,10 +302,9 @@ document.getElementById("input_pc").onclick = function() {
 
 document.getElementById("input_player").onclick = function() {
     game.setDifficulty(0);       
-    game.joinGame();
+    joinGame(game);
     console.log("set update");
     game.setOpponent("player");
-
     console.log(" Nice entraste friend agora espera idk " + game.game_id);
 
 }
@@ -375,7 +322,7 @@ document.getElementById("send_login").onclick = function() {
         return;
     }
     if (user.password == document.getElementById("input_login_pass").value){
-        logIn(document.getElementById("input_login_user").value);
+        logIn(document.getElementById("input_login_user").value, document.getElementById("input_login_pass").value);
     }
 
 }
@@ -403,10 +350,6 @@ document.getElementById("send_signup").onclick = function() {
         logIn(document.getElementById("input_signup_user").value);
     }
 
-
-   
-    
-    
 }
 
 function allStorage() {
@@ -453,4 +396,3 @@ function updateLeaderboard(points, user, ai_level){
     new_points.innerHTML = points + ' points - user ' + user + ' - ai_level '+ ai_level;
     classif.appendChild(new_points);
 }
-

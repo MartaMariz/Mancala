@@ -1,4 +1,5 @@
-
+import {enableClick, setTurn, disableClick, sleep} from './utils.js';
+import { notifyMove } from './server.js';
 
 export class gameRules {
     constructor(board, ai_level, starts, op, game){
@@ -20,9 +21,7 @@ export class gameRules {
                 play_again = board.play(i);
 
                 if ( op == "player"){
-                        
                     notifyMove(game, i - board.num_holes);
-
                 }
 
                 game_state = board.endGame();
@@ -47,83 +46,6 @@ export class gameRules {
 
 }
 
-function disableClick(board){
-    let holes = document.getElementsByClassName("hole");
-    for (let i = board.num_holes; i < holes.length; i++){
-        holes[i].style.pointerEvents = 'none';
-    }
-}
-
-function enableClick(board){
-    let holes = document.getElementsByClassName("hole");
-    for (let i = board.num_holes; i < holes.length; i++){
-        holes[i].style.pointerEvents = 'auto';
-    }
-}
-
-function aiMove(ai_level, board){
-    if (ai_level == 1){
-        let index = Math.floor(Math.random()*board.num_holes);
-        console.log("oi sou o ai joguei index " + index);
-        return board.play(index); 
-    }
-    else {
-        let index = smartAI(board, ai_level);
-        console.log("o melhor index é " + index);
-        return board.play(index);
-    }
-}
-
-function smartAI(board, ai_level){
-    console.log("AI PLAYNG");
-    let points = 0;
-    let curr_points;
-    let best_move;
-    for(let i = 0 ; i< board.num_holes; i++){
-        console.log("CHECAR PINTS");
-
-        curr_points = board.simulatePlay(i, ai_level);
-        if (curr_points >= points){
-            points = curr_points;
-            best_move = i;
-        }
-    }
-    if (points == 0){
-        console.log("olha fodasse");
-        best_move = Math.floor(Math.random()*board.num_holes);
-    }
-    return best_move;
-}
-
-function notifyMove( game, index){
-    console.log("notifiquei a jogada oi dá update pls beijo");
-    console.log( game.user );
-    console.log( "index" + index );
-    console.log( game.game_id );
-
-
-    let options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 
-                'application/json;'
-        },
-        body: JSON.stringify({nick: game.user, password: "123", game: game.game_id, move: index })
-    }
-    fetch('http://twserver.alunos.dcc.fc.up.pt:8008/notify', options)
-    .then((response) => {
-        if (response.ok) {
-            console.log(response.json());
-            console.log("move was made");
-          return response;
-        } else {
-          throw new Error('Invalid move');
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-    });
-}
 
 async function waitforAI(board, game, ai_level){
     let play_again;
@@ -162,10 +84,36 @@ async function gameOver(board, game, ai_level){
     board.clearBoard();
 }
 
-function setTurn(player){
-    document.getElementById("turn").innerHTML = 'Vez do Player'+player;
+function aiMove(ai_level, board){
+    if (ai_level == 1){
+        let index = Math.floor(Math.random()*board.num_holes);
+        console.log("oi sou o ai joguei index " + index);
+        return board.play(index); 
+    }
+    else {
+        let index = smartAI(board, ai_level);
+        console.log("o melhor index é " + index);
+        return board.play(index);
+    }
 }
 
-function sleep (time) {
-    return new Promise((resolve) => setTimeout(resolve, time));
+function smartAI(board, ai_level){
+    console.log("AI PLAYNG");
+    let points = 0;
+    let curr_points;
+    let best_move;
+    for(let i = 0 ; i< board.num_holes; i++){
+        console.log("CHECAR PINTS");
+
+        curr_points = board.simulatePlay(i, ai_level);
+        if (curr_points >= points){
+            points = curr_points;
+            best_move = i;
+        }
+    }
+    if (points == 0){
+        console.log("olha fodasse");
+        best_move = Math.floor(Math.random()*board.num_holes);
+    }
+    return best_move;
 }

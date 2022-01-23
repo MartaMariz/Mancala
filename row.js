@@ -1,6 +1,6 @@
 import { Bean } from './bean.js';
 import {Hole} from './hole.js';
-
+import {sleep} from './utils.js';
 
 export class Row {
     constructor(row_index, num_holes, num_beans, board){
@@ -150,8 +150,4 @@ export class Row {
     simulateStealBeans(index){
         return this.holelist[index].beanlist.length;
     }
-}
-
-function sleep (time) {
-    return new Promise((resolve) => setTimeout(resolve, time));
 }
