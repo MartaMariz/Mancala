@@ -44,7 +44,7 @@ function logInServer(user, pass){
         },
         body: JSON.stringify({nick: user, password: pass })
     }
-    fetch('http://twserver.alunos.dcc.fc.up.pt:8008/register', options)
+    fetch('http://twserver.alunos.dcc.fc.up.pt:9074/register', options)
     .then((response) => {
         if (response.ok) {
             console.log(response.json());
@@ -54,7 +54,7 @@ function logInServer(user, pass){
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.message);
     });
 }
 
@@ -153,6 +153,7 @@ function leave(game){
 }
 
 function ranking(){
+    console.log("dentro do ranking");
     let options = {
         method: 'POST',
         headers: {
@@ -164,6 +165,7 @@ function ranking(){
     let fetchRes = fetch('http://twserver.alunos.dcc.fc.up.pt:9074/ranking', options);
     fetchRes.then(res =>
         res.json()).then(d => {
+            console.log(d.ranking);
             loadRanking(d.ranking);
         })
 }
@@ -181,6 +183,7 @@ async function serverGameOver(winner, player, board){
 }
 
 function loadRanking(ranking){
+
     console.log(ranking);
 
     const classif = document.getElementById("boardbody_server");

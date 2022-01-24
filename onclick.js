@@ -209,7 +209,6 @@ document.getElementById("send_login").onclick = function() {
     const user = JSON.parse(localStorage.getItem(document.getElementById("input_login_user").value));
 
     const r = logInServer(document.getElementById("input_login_user").value, document.getElementById("input_login_pass").value);
-    console.log(r);
 
     if (user == null) {
         alert("User not found!");
@@ -226,7 +225,6 @@ document.getElementById("send_signup").onclick = function() {
     const pass = document.getElementById("input_signup_pass").value
 
     const r = logInServer(nick, pass);
-    console.log(r);
 
     const user = JSON.parse(localStorage.getItem(nick));
     if (user != null) {
