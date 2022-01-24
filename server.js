@@ -165,7 +165,7 @@ function ranking(){
     let fetchRes = fetch('http://twserver.alunos.dcc.fc.up.pt:9074/ranking', options);
     fetchRes.then(res =>
         res.json()).then(d => {
-            console.log(d.ranking);
+            console.log(d);
             loadRanking(d.ranking);
         })
 }
