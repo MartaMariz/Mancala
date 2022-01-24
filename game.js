@@ -83,7 +83,7 @@ export class Game{
 
         if (game_state == 1) {
             disableClick(this.board);
-            gameOver(this.board, this, ai_level);
+            serverGameOver(this.board, this, ai_level);
             return 0;
         }
             

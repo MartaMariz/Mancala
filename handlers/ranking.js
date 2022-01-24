@@ -1,15 +1,15 @@
 const fs = require("fs");
 
 exports.handleRanking = () => {
-  const filePath = "./handlers/ranking.json";
+  const file_path = "./handlers/ranking.json";
 
   try {
-    const fileData = fs.readFileSync(filePath, {
+    const ranking_data = fs.readFileSync(file_path, {
       encoding: "utf-8",
       flag: "r",
     });
 
-    const line = fileData.split(/\r?\n/)[0];
+    const line = ranking_data.split(/\r?\n/)[0];
     return [line, 200];
   } catch (err) {
     console.error(err);

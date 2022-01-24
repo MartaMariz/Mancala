@@ -2,7 +2,7 @@ const fs = require("fs");
 
 exports.handleRegister = function (body) {
   const data = JSON.parse(body);
-  const filePath = "./handlers/users.jsonl";
+  const file_path = "./handlers/users.jsonl";
   let nick, pass;
 
   for (const key in data) {
@@ -24,27 +24,27 @@ exports.handleRegister = function (body) {
   }
 
   try {
-    let isFound = false;
+    let found = false;
 
-    const fileData = fs.readFileSync(filePath, {
+    const user_data = fs.readFileSync(file_path, {
       encoding: "utf-8",
       flag: "r",
     });
 
-    const lines = fileData.split(/\r?\n/);
+    const lines = user_data.split(/\r?\n/);
 
     for (let i = 0; i < lines.length; i++) {
       if (lines[i] !== "") {
-        const lineData = JSON.parse(lines[i]);
+        const line = JSON.parse(lines[i]);
 
-        if (lineData.nick === nick) {
+        if (line.nick === nick) {
           if (
-            lineData.pass === pass
+            line.pass === pass
           ) {
-            isFound = true;
+            found = true;
             return [{}, 200];
           } else {
-            isFound = true;
+            found = true;
             return [
               { error: "User registered with a different password" },
               401,
@@ -54,15 +54,13 @@ exports.handleRegister = function (body) {
       }
     }
 
-    if (!isFound) {
-      const hashPass = pass;
-
-      const newUser = {
+    if (!found) {
+      const new_user = {
         nick: nick,
-        pass: hashPass,
+        pass: pass,
       };
 
-      fs.appendFileSync(filePath, JSON.stringify(newUser) + "\n", (err) => {
+      fs.appendFileSync(file_path, JSON.stringify(new_user) + "\n", (err) => {
         if (err) {
           throw err;
         }

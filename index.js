@@ -14,9 +14,6 @@ class Server {
   initServer() {
     this.server = http.createServer((request, response) => {
       switch (request.method) {
-        case "GET":
-          this.handleGET(request, response);
-          break;
         case "POST":
           let body = "";
           request.on("data", (chunk) => {
