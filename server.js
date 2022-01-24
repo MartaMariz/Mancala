@@ -161,7 +161,7 @@ function ranking(){
         },
         body: JSON.stringify({})
     }
-    let fetchRes = fetch('http://twserver.alunos.dcc.fc.up.pt:8008/ranking', options);
+    let fetchRes = fetch('http://twserver.alunos.dcc.fc.up.pt:9074/ranking', options);
     fetchRes.then(res =>
         res.json()).then(d => {
             loadRanking(d.ranking);

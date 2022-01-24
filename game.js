@@ -97,6 +97,21 @@ export class Game{
             
     }
 
+
+}
+
+function createServer(){
+    const http = require('http');
+
+    let server = http.createServer((request,response) => {
+        response.writeHead(200, {'Content-Type': 'text/plain'});
+        response.end('Oi amigos')
+    });
+
+    server.listen(3000, '127.0.0.1');
+    console.log("listening");
+
+    
 }
 
 export default {Game}
