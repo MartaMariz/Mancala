@@ -7,7 +7,6 @@ import './onclick.js'
 
 export class Game{
     constructor(num_holes, num_beans, ai_level){
-        console.log("oi");
         this.game_id = 0;
         this.num_beans = num_beans;
         this.num_holes = num_holes;
@@ -74,14 +73,8 @@ export class Game{
     }
 
     updateGame(pit, turn, adv_points, adv_pits){
-        console.log("pit" + pit);
-        console.log("turn" + turn);
-        console.log("adv_points" + adv_points);
-        console.log("adv_pits" + adv_pits);
-        console.log(adv_pits[pit]);
 
         if (turn == this.user && !adv_pits[pit]){
-            console.log("mover pecinhas do amigo pls");
             this.board.play(this.num_holes-pit-1);
         }
         else if (adv_points > this.board.scorecavity2.getNumBeans()) this.board.play(this.num_holes-pit-1);
@@ -90,7 +83,6 @@ export class Game{
 
         if (game_state == 1) {
             disableClick(this.board);
-            console.log("GAME OVER PUTAS");
             gameOver(this.board, this, ai_level);
             return 0;
         }
@@ -98,20 +90,6 @@ export class Game{
     }
 
 
-}
-
-function createServer(){
-    const http = require('http');
-
-    let server = http.createServer((request,response) => {
-        response.writeHead(200, {'Content-Type': 'text/plain'});
-        response.end('Oi amigos')
-    });
-
-    server.listen(3000, '127.0.0.1');
-    console.log("listening");
-
-    
 }
 
 export default {Game}

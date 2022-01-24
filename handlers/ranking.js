@@ -10,7 +10,6 @@ exports.handleRanking = () => {
     });
 
     const line = fileData.split(/\r?\n/)[0];
-    console.log("dentro do ranking "+ line);
     return [line, 200];
   } catch (err) {
     console.error(err);

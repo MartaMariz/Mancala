@@ -15,7 +15,6 @@ export class ScoreCavity {
         const beancount = document.getElementById("countbean-"+this.html_id);
         beancount.innerHTML = this.num_beans;
 
-        console.log("adding bean to "+ this.html_id);
     }
     
     getNumBeans(){

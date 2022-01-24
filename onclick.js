@@ -145,7 +145,6 @@ document.getElementById("acaba_jogo").onclick = function() {
     eraseInstrucoes();
     eraseNovoJogo();
     if (game.game_id != 0){
-        console.log("o game id era diferente de 0");
         leave(game);
     }
     document.getElementById("game").style.display = "none";
@@ -197,9 +196,7 @@ document.getElementById("input_pc").onclick = function() {
 document.getElementById("input_player").onclick = function() {
     game.setDifficulty(0);       
     joinGame(game);
-    console.log("set update");
     game.setOpponent("player");
-    console.log(" Nice entraste friend agora espera idk " + game.game_id);
 
 }
 

@@ -56,10 +56,7 @@ class Server {
     let response;
     switch (url) {
       case "/ranking":
-        console.log("Ranking");
         response = ranking.handleRanking();
-        console.log("no ranking response 0 " + response[0]);
-        console.log("no ranking response 1 " +response[1]);
 
         res.writeHead(response[1], {
           "Content-Type": "application/json",
@@ -71,10 +68,7 @@ class Server {
         });
         break;
       case "/register":
-        console.log(body);
         response = register.handleRegister(body);
-        console.log("response 0 " + response[0]);
-        console.log("response 1 " + response[1]);
 
         res.writeHead(response[1], {
           "Content-Type": "application/json",
@@ -89,7 +83,6 @@ class Server {
         const error = {
           error: "Invalid POST Request",
         };
-        console.log("invalid post request");
         res.writeHead(404, {
           "Content-Type": "application/json",
           "Access-Control-Allow-Headers": "*",

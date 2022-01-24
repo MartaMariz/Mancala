@@ -2,13 +2,6 @@ import {sleep, enableClick, disableClick, setTurn} from './utils.js';
 
 
 function notifyMove(game, index){
-    console.log("notifiquei a jogada oi dá update pls beijo");
-    console.log( game.user );
-    console.log( game.pass );
-
-    console.log( "index" + index );
-    console.log( game.game_id );
-
 
     let options = {
         method: 'POST',
@@ -21,8 +14,6 @@ function notifyMove(game, index){
     fetch('http://twserver.alunos.dcc.fc.up.pt:8008/notify', options)
     .then((response) => {
         if (response.ok) {
-            console.log(response.json());
-            console.log("move was made");
           return response;
         } else {
           throw new Error('Invalid move');
@@ -34,8 +25,6 @@ function notifyMove(game, index){
 }
 
 function logInServer(user, pass){
-    console.log(user + "  " + pass);
-    console.log("doing log in server");
     let options = {
         method: 'POST',
         headers: {
@@ -47,7 +36,6 @@ function logInServer(user, pass){
     fetch('http://twserver.alunos.dcc.fc.up.pt:9074/register', options)
     .then((response) => {
         if (response.ok) {
-            console.log(response.json());
           return response;
         } else {
           throw new Error('Wrong password');
@@ -70,7 +58,6 @@ function joinGame(thisgame){
     let fetchRes = fetch('http://twserver.alunos.dcc.fc.up.pt:8008/join', options);
     fetchRes.then(res =>
         res.json()).then(d => {
-            console.log(d.game);
             thisgame.game_id = d.game;
             setUpdate(d.game, thisgame);
             return d.game;
@@ -83,16 +70,11 @@ function setUpdate(game, gameobj){
     urlUpdate.searchParams.append('game', game);
     urlUpdate.searchParams.append('nick', gameobj.user);
 
-    console.log("fiz cenas nos params e tal");
-    console.log(urlUpdate.href);
-    
     const updater = new EventSource(urlUpdate.href);
 
     updater.onmessage = res => {
-        console.log(res.data);
 
         const message = JSON.parse(res.data);
-        console.log(message);
 
         if ('winner' in message){
             serverGameOver(message.winner, gameobj.user, gameobj.board);
@@ -121,9 +103,7 @@ function setUpdate(game, gameobj){
                 for (let side in message.board.sides){
                     if (side != gameobj.user) {
                         adv_side = message.board.sides[side];
-                        console.log(adv_side.pits);
                         adv_pits = adv_side.pits;
-                        //adv_pits = adv_pits.reverse();
                     }
                 }
                 gameobj.updateGame(pit, turn, adv_points, adv_pits);
@@ -147,13 +127,10 @@ function leave(game){
     let fetchRes = fetch('http://twserver.alunos.dcc.fc.up.pt:8008/leave', options);
     fetchRes.then(res =>
         res.json()).then(d => {
-            console.log("leave game");
-            console.log(d);
         })
 }
 
 function ranking(){
-    console.log("dentro do ranking");
     let options = {
         method: 'POST',
         headers: {
@@ -165,7 +142,6 @@ function ranking(){
     let fetchRes = fetch('http://twserver.alunos.dcc.fc.up.pt:9074/ranking', options);
     fetchRes.then(res =>
         res.json()).then(d => {
-            console.log(d);
             loadRanking(d.ranking);
         })
 }
@@ -183,8 +159,6 @@ async function serverGameOver(winner, player, board){
 }
 
 function loadRanking(ranking){
-
-    console.log(ranking);
 
     const classif = document.getElementById("boardbody_server");
 

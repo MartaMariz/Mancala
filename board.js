@@ -40,15 +40,12 @@ export class Board {
 
     endGame(){
 
-        console.log(" check endgame");
 
         if (this.rowlist[0].checkEndGame()){
-            console.log("game will wnd 0");
             this.rowlist[1].endGame();
             return 1;
         }
         if (this.rowlist[1].checkEndGame()){
-            console.log("game will wnd 1");
             this.rowlist[0].endGame();
             return 1;
         }
@@ -56,7 +53,6 @@ export class Board {
     }
 
     simulatePlay(index, ai_level){
-        console.log("estou simulating " + ai_level);
         let points = 0;
         let player = this.getPlayer(index);
         let curr_row = this.getRow(index);
@@ -72,7 +68,6 @@ export class Board {
                 let condition_to_steal = (player == 2 && curr_row == 0);
                 if (beans_to_distribute < 0 && condition_to_steal) {
                     points += this.simulateStealBeans((beans_to_distribute+1)*(-1));
-                    console.log("bue pontos " + points);
                 }
             }
 
@@ -96,7 +91,6 @@ export class Board {
             
             }
         }
-        console.log("points " + points);
         return points;
 
     }
@@ -138,7 +132,6 @@ export class Board {
             if (beans_to_distribute>0){
                 if (curr_row == 0) {
                     this.scorecavity2.addBean();
-                    console.log("adding bean to player-two");
                     beans_to_distribute--;
                     curr_row = 1;
                     index = -1;
@@ -146,7 +139,6 @@ export class Board {
                 }
                 else {
                     this.scorecavity1.addBean();
-                    console.log("adding bean to player-one");
                     beans_to_distribute--;
                     curr_row = 0;
                     index = this.num_holes;
@@ -154,7 +146,6 @@ export class Board {
                 }
             
             }
-            console.log(beans_to_distribute);
         }
         return 0;
         
@@ -167,7 +158,6 @@ export class Board {
         else {
             this.rowlist[0].stealBeans(index);
         }
-        console.log(player + "stole from index " + index);
     }
 
     simulateStealBeans(index){

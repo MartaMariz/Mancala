@@ -4,10 +4,8 @@ exports.handleRegister = function (body) {
   const data = JSON.parse(body);
   const filePath = "./handlers/users.jsonl";
   let nick, pass;
-  console.log("handling register");
 
   for (const key in data) {
-      console.log("here");
     if (key === "nick") {
       nick = data[key];
     } else if (key === "password") {
@@ -26,7 +24,6 @@ exports.handleRegister = function (body) {
   }
 
   try {
-      console.log("looking for");
     let isFound = false;
 
     const fileData = fs.readFileSync(filePath, {
@@ -39,14 +36,12 @@ exports.handleRegister = function (body) {
     for (let i = 0; i < lines.length; i++) {
       if (lines[i] !== "") {
         const lineData = JSON.parse(lines[i]);
-        console.log(lineData);
 
         if (lineData.nick === nick) {
           if (
             lineData.pass === pass
           ) {
             isFound = true;
-            console.log("user found");
             return [{}, 200];
           } else {
             isFound = true;
@@ -60,7 +55,6 @@ exports.handleRegister = function (body) {
     }
 
     if (!isFound) {
-        console.log("user not found")
       const hashPass = pass;
 
       const newUser = {
@@ -69,7 +63,6 @@ exports.handleRegister = function (body) {
       };
 
       fs.appendFileSync(filePath, JSON.stringify(newUser) + "\n", (err) => {
-          console.log("is doing error");
         if (err) {
           throw err;
         }

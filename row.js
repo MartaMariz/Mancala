@@ -69,9 +69,7 @@ export class Row {
 
         await sleep(2500).then(() => {
             for (let i = 0; i<this.num_holes; i++){
-                console.log("stealing bean "+ this.row_index + "hole " + i);
                 for (let j = 0; j < this.holelist[i].getNumBeans(); j++){
-                    console.log("deleting bean " +j+ "on hole "+i);
                     this.board.giveBean(this.row_index);
                 }
                 this.holelist[i].spreadBeans();
@@ -90,7 +88,6 @@ export class Row {
             let condition_to_steal = beans_to_distribute == 1 && this.holelist[curr_index].num_beans == 0 && this.row_index == 0;
             if (condition_to_steal) {
                 beans_to_distribute = (curr_index+1)*(-1);
-                console.log(beans_to_distribute);
                 return beans_to_distribute;
             }
 
